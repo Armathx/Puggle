@@ -462,6 +462,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1813311916362465036, guid: a8a98fa00bf052644acf6d8894ff2f75, type: 3}
+      propertyPath: flameCount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1813311916362465036, guid: a8a98fa00bf052644acf6d8894ff2f75, type: 3}
+      propertyPath: flameWidth
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1850989777590377213, guid: a8a98fa00bf052644acf6d8894ff2f75, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -556,8 +564,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2318025199614130294, guid: 21035d0f8cdcf4a46b2d3d0d6ede2fc6, type: 3}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
+      propertyPath: maxObjects
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: minObjects
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: lineRenderer

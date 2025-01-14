@@ -36,7 +36,7 @@ public class FlameEffect : MonoBehaviour
             float xPos = Mathf.Lerp(minX, maxX, (float)i / (flameCount - 1));
 
             // Position des particules sur la limite inférieure (y = -screenHeight / 2f)
-            Vector3 spawnPosition = new Vector3(xPos, -screenHeight / 2f, 0);
+            Vector3 spawnPosition = new Vector3(xPos, -screenHeight / 1.5f, 0);
 
             // Instancier la particule
             GameObject Flame = Instantiate(flameParticlePrefab, spawnPosition, Quaternion.identity);
