@@ -66,7 +66,7 @@ public class Victory : MonoBehaviour
             }
             else
             {
-                Time.timeScale = 1.0f; // Réinitialiser la vitesse normale
+                Time.timeScale = 1.5f; // Réinitialiser la vitesse normale
 
                 // Dé-zoomer la caméra (retour à la taille orthographique originale)
                 if (mainCamera != null)
@@ -86,7 +86,7 @@ public class Victory : MonoBehaviour
         }
         else
         {
-            Time.timeScale = 1f; // Réinitialiser la vitesse normale si plus d'un objet reste
+            Time.timeScale = 1.5f; // Réinitialiser la vitesse normale si plus d'un objet reste
         }
     }
 
@@ -101,7 +101,7 @@ public class Victory : MonoBehaviour
         }
 
         // Vous pouvez arrêter le jeu ou exécuter d'autres actions ici
-        Time.timeScale = 2.0f; // Augmenter le timescale après la victoire
+        Time.timeScale = 0.666f; // Diminuer le timescale après la victoire
 
         mainCamera.orthographicSize = Mathf.Lerp(originalSize, mainCamera.orthographicSize, cameraZoomSpeed * Time.unscaledDeltaTime);
     }

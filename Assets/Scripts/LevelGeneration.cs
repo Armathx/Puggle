@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class LevelGeneration : MonoBehaviour
 {
+    public GameObject MainBall;
     public GameObject objectToSpawn; // Le premier prefab à instancier
     public GameObject additionalObjectToSpawn; // Le second prefab à instancier
     public GameObject killableObjectToSpawn; // Le troisième prefab à instancier
@@ -13,6 +14,9 @@ public class LevelGeneration : MonoBehaviour
     public float sphereDiameter = 0.8f; // Diamètre des sphères
     public bool Once = true;
     public LineRenderer lineRenderer;
+    bool bCanShoot = true;
+
+    public Transform[] spawnPoints;
 
     public Rigidbody2D rb;
     public int clickForce = 500;
@@ -22,39 +26,56 @@ public class LevelGeneration : MonoBehaviour
 
     void Start()
     {
+
+        SpawnMainBall(MainBall);
+
         // Générer les objets
         SpawnObjects(objectToSpawn, Random.Range(minObjects, maxObjects));
         SpawnObjects(additionalObjectToSpawn, additionalObjectsCount);
         SpawnObjects(killableObjectToSpawn, killableObjectsCount);
+
     }
 
     void FixedUpdate()
     {
-        // Récupérer la position de la souris en coordonnées mondiales
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0f; // Assurer une position Z correcte pour un jeu 2D
-
-        // Calculer la direction vers la souris
-        Vector3 mouseDir = (mousePos - rb.transform.position).normalized;
-
-        // Mettre à jour le LineRenderer
-        lineRenderer.SetPosition(0, mousePos);
-        lineRenderer.SetPosition(1, rb.transform.position);
-
-        // Appliquer une force lors du clic gauche
-        if (Input.GetMouseButtonDown(0))
+        if (bCanShoot)
         {
-            rb.bodyType = RigidbodyType2D.Dynamic; // Passer le Rigidbody en mode dynamique
-            rb.AddForce(mouseDir * clickForce); // Appliquer une force
+            // Récupérer la position de la souris en coordonnées mondiales
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0f; // Assurer une position Z correcte pour un jeu 2D
+
+            // Calculer la direction vers la souris
+            Vector3 mouseDir = (mousePos - rb.transform.position).normalized;
+
+
+
+            // Mettre à jour le LineRenderer
+            lineRenderer.SetPosition(0, mousePos);
+            lineRenderer.SetPosition(1, rb.transform.position);
+
+
+            // Appliquer une force lors du clic gauche
+            if (Input.GetMouseButtonDown(0))
+            {
+                rb.bodyType = RigidbodyType2D.Dynamic; // Passer le Rigidbody en mode dynamique
+                rb.AddForce(mouseDir * clickForce); // Appliquer une force
+
+                bCanShoot = false;
+            }
         }
     }
 
-    private void OnDrawGizmos()
+    //private void OnDrawGizmos()
+    //{
+    //    // Dessiner une ligne entre l'objet et la souris
+    //    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    //    mousePos.z = 0f;
+    //    Gizmos.DrawLine(rb.transform.position, mousePos);
+    //}
+
+    void SpawnMainBall(GameObject prefab )
     {
-        // Dessiner une ligne entre l'objet et la souris
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0f;
-        Gizmos.DrawLine(rb.transform.position, mousePos);
+
     }
 
     void SpawnObjects(GameObject prefab, int count)

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8272341286159829744}
   - component: {fileID: 2851363109630106757}
   - component: {fileID: 1241346627191182200}
-  - component: {fileID: 1160253755315009800}
+  - component: {fileID: 3076360317998562351}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -49,14 +49,14 @@ MonoBehaviour:
   objectToSpawn: {fileID: 6362106587068119521, guid: a2535a6f185baa841942fc12b3aeaf77, type: 3}
   additionalObjectToSpawn: {fileID: 4826956339257901276, guid: f08d82d7d1b277e479c87f6851fa250c, type: 3}
   killableObjectToSpawn: {fileID: 4697034577688156535, guid: 648453e798b3c49428f314d03877afb9, type: 3}
-  minObjects: 5
-  maxObjects: 20
-  additionalObjectsCount: 15
-  killableObjectsCount: 5
-  sphereDiameter: 0.45
+  minObjects: 30
+  maxObjects: 100
+  additionalObjectsCount: 1
+  killableObjectsCount: 2
+  sphereDiameter: 0.4
   Once: 1
-  lineRenderer: {fileID: 1160253755315009800}
-  rb: {fileID: 5122650456381606371, guid: 21035d0f8cdcf4a46b2d3d0d6ede2fc6, type: 3}
+  lineRenderer: {fileID: 0}
+  rb: {fileID: 0}
   clickForce: 500
 --- !u!114 &1241346627191182200
 MonoBehaviour:
@@ -72,7 +72,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tagToCheck: Green
   victoryScreen: {fileID: 0}
---- !u!120 &1160253755315009800
+  slowMotionFactor: 0.25
+  mainBall: {fileID: 0}
+  mainCamera: {fileID: 0}
+  maxDistance: 1
+  cameraZoomFactor: 2
+  cameraZoomSpeed: 3
+--- !u!120 &3076360317998562351
 LineRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
@@ -127,8 +133,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.023529053
-        value: 0.13888931
+        time: 0
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
