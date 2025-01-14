@@ -37,6 +37,9 @@ public class LevelGeneration : MonoBehaviour
     // Liste globale des positions utilisées
     private HashSet<Vector3> usedPositions = new HashSet<Vector3>();
 
+
+    // Section: Container d'objets
+    [Header("Container d'objets")]
     private Transform mainBallContainer;
     private Transform objectContainer;
     private Transform additionalObjectContainer;
@@ -81,6 +84,8 @@ public class LevelGeneration : MonoBehaviour
             // Passer au point de spawn précédent
             currentSpawnIndex = (currentSpawnIndex - 1 + spawnPoints.Length) % spawnPoints.Length;
             Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
+
+            RespawnMainBallAtCurrentPoint();
         }
 
         if (Input.GetKeyDown(KeyCode.D))
@@ -88,6 +93,8 @@ public class LevelGeneration : MonoBehaviour
             // Passer au point de spawn suivant
             currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
             Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
+
+            RespawnMainBallAtCurrentPoint();
         }
 
         // Réapparaître la balle au point de spawn actif avec une touche spécifique (par exemple, R)
@@ -100,7 +107,7 @@ public class LevelGeneration : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (bCanShoot && rb != null)
+        if (bCanShoot)
         {
             // Récupérer la position de la souris en coordonnées mondiales
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -161,42 +168,6 @@ public class LevelGeneration : MonoBehaviour
         }
     }
 
-    //public void RespawnMainBall()
-    //{
-    //    // Vérifier si le tableau spawnPoints contient des éléments
-    //    if (spawnPoints.Length > 0)
-    //    {
-    //        // Sélectionner un transform aléatoire dans le tableau spawnPoints
-    //        Transform randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-
-    //        // Instancier la MainBall à la position de spawn aléatoire
-    //        GameObject spawnedBall = Instantiate(MainBall, randomSpawnPoint.position, Quaternion.identity);
-
-    //        // Récupérer le Rigidbody2D de la MainBall instanciée
-    //        rb = spawnedBall.GetComponent<Rigidbody2D>();
-
-    //        if (rb == null)
-    //        {
-    //            Debug.LogError("Le prefab MainBall ne possède pas de Rigidbody2D !");
-    //        }
-    //        else
-    //        {
-    //            // Définir le Rigidbody2D comme Kinematic
-    //            rb.bodyType = RigidbodyType2D.Kinematic;
-
-    //            // Définir la détection des collisions sur Continuous
-    //            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Aucun point de spawn disponible !");
-    //    }
-
-    //    // Réinitialiser le flag pour pouvoir tirer à nouveau après le respawn
-    //    bCanShoot = true;
-    //}//Obsolete
-
     public void RespawnMainBallAtCurrentPoint() //Respawn ball after Death
     {
         // Supprimer la balle actuelle si elle existe
@@ -214,6 +185,7 @@ public class LevelGeneration : MonoBehaviour
 
         // Récupérer et configurer le Rigidbody2D de la balle instanciée
         rb = spawnedBall.GetComponent<Rigidbody2D>();
+
         if (rb == null)
         {
             Debug.LogError("Le prefab MainBall ne possède pas de Rigidbody2D !");
@@ -327,6 +299,10 @@ public class LevelGeneration : MonoBehaviour
             GameObject spawnPoint = new GameObject($"SpawnPoint_{i + 1}");
             spawnPoint.transform.position = new Vector3(xPosition, yPosition, 0f);
 
+            // Ajouter un visuel pour représenter le point de spawn
+            GameObject visual = CreateSpawnPointVisual(spawnPoint.transform);
+            visual.transform.SetParent(spawnPoint.transform); // Faire du cercle un enfant du point
+
             // Ajouter le point comme enfant du conteneur
             spawnPoint.transform.SetParent(spawnPointContainer.transform);
 
@@ -336,6 +312,45 @@ public class LevelGeneration : MonoBehaviour
 
         // Assigner les points générés au tableau spawnPoints
         spawnPoints = points.ToArray();
+    }
+
+    // Crée un cercle visuel pour représenter un point de spawn
+    GameObject CreateSpawnPointVisual(Transform parent)
+    {
+        // Créer un GameObject pour le visuel
+        GameObject circle = new GameObject("Visual");
+
+        // Ajouter un composant SpriteRenderer pour afficher un cercle
+        SpriteRenderer renderer = circle.AddComponent<SpriteRenderer>();
+        renderer.sprite = GenerateCircleSprite();
+        renderer.color = Color.red; // Couleur du cercle
+
+        // Réduire la taille pour qu'il soit petit
+        circle.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
+
+        // Positionner au centre du point de spawn
+        circle.transform.position = parent.position;
+
+        return circle;
+    }
+
+    // Génère un Sprite circulaire à utiliser pour les visuels
+    Sprite GenerateCircleSprite()
+    {
+        Texture2D texture = new Texture2D(128, 128);
+        for (int y = 0; y < texture.height; y++)
+        {
+            for (int x = 0; x < texture.width; x++)
+            {
+                // Calculer la distance au centre
+                float distance = Vector2.Distance(new Vector2(x, y), new Vector2(64, 64));
+                texture.SetPixel(x, y, distance <= 64 ? Color.white : Color.clear);
+            }
+        }
+        texture.Apply();
+
+        // Créer le sprite à partir de la texture
+        return Sprite.Create(texture, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
     }
 
 }
