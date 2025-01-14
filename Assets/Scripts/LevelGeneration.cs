@@ -27,6 +27,7 @@ public class LevelGeneration : MonoBehaviour
     // Section: Spawn Points
     [Header("Points de Spawn")]
     public Transform[] spawnPoints;
+    private int currentSpawnIndex = 0; // Index du point de spawn actif
 
     // Section: Rigidbody et physique
     [Header("Rigidbody et physique")]
@@ -46,6 +47,31 @@ public class LevelGeneration : MonoBehaviour
         SpawnObjects(additionalObjectToSpawn, additionalObjectsCount);
         SpawnObjects(killableObjectToSpawn, killableObjectsCount);
     }
+
+    void Update()
+    {
+        // Gestion des touches pour changer de point de spawn
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            // Passer au point de spawn précédent
+            currentSpawnIndex = (currentSpawnIndex - 1 + spawnPoints.Length) % spawnPoints.Length;
+            Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
+        }
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            // Passer au point de spawn suivant
+            currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
+            Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
+        }
+
+        // Réapparaître la balle au point de spawn actif avec une touche spécifique (par exemple, R)
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RespawnMainBallAtCurrentPoint();
+        }
+    }
+
 
     void FixedUpdate()
     {
@@ -139,6 +165,34 @@ public class LevelGeneration : MonoBehaviour
         }
 
         // Réinitialiser le flag pour pouvoir tirer à nouveau après le respawn
+        bCanShoot = true;
+    }
+
+    public void RespawnMainBallAtCurrentPoint()
+    {
+        // Supprimer la balle actuelle si elle existe
+        if (rb != null)
+        {
+            Destroy(rb.gameObject);
+        }
+
+        // Instancier la MainBall au point de spawn actif
+        Transform spawnPoint = spawnPoints[currentSpawnIndex];
+        GameObject spawnedBall = Instantiate(MainBall, spawnPoint.position, Quaternion.identity);
+
+        // Récupérer et configurer le Rigidbody2D de la balle instanciée
+        rb = spawnedBall.GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            Debug.LogError("Le prefab MainBall ne possède pas de Rigidbody2D !");
+        }
+        else
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        }
+
+        // Réinitialiser le flag pour permettre de tirer à nouveau
         bCanShoot = true;
     }
 
