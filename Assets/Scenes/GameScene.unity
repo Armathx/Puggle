@@ -443,6 +443,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa5f152cb7bf9b4b902946e8f22bc3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2090250661 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1241346627191182200, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
+  m_PrefabInstance: {fileID: 7666911266348527078}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b03dd1a8c48d3fd4f818639a4e38016d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3602629813009878560
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -520,6 +531,18 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 1241346627191182200, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
+      propertyPath: maxDistance
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1241346627191182200, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
+      propertyPath: explosionEffect
+      value: 
+      objectReference: {fileID: 7648143934663554497, guid: 6c297c201633bfa45992d3055bab2c72, type: 3}
+    - target: {fileID: 1241346627191182200, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
+      propertyPath: slowMotionFactor
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: rb
       value: 
@@ -541,12 +564,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2090250658}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
+      propertyPath: victoryScript
+      value: 
+      objectReference: {fileID: 2090250661}
+    - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: killableObjectsCount
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: additionalObjectsCount
-      value: 10
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: spawnPoints.Array.size

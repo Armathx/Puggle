@@ -46,6 +46,8 @@ public class LevelGeneration : MonoBehaviour
     private Transform killableObjectContainer;
     private Transform spawnPointContainer;
 
+    public Victory victoryScript; // Référence au script Victory
+
     void CreateHierarchyContainers()
     {
         // Créer des conteneurs pour organiser les objets
@@ -67,7 +69,7 @@ public class LevelGeneration : MonoBehaviour
         GenerateSpawnPoints();
 
         // Générer la MainBall et assigner son Rigidbody2D à 'rb'
-        SpawnMainBall(MainBall);
+        SpawnMainBall();
 
         // Générer les objets
         SpawnObjects(objectToSpawn, Random.Range(minObjects, maxObjects));
@@ -102,10 +104,12 @@ public class LevelGeneration : MonoBehaviour
         {
             RespawnMainBallAtCurrentPoint();
         }
+
+        Shoot();
     }
 
 
-    void FixedUpdate()
+    void Shoot()
     {
         if (bCanShoot)
         {
@@ -120,29 +124,33 @@ public class LevelGeneration : MonoBehaviour
             lineRenderer.SetPosition(0, mousePos);
             lineRenderer.SetPosition(1, rb.transform.position);
 
-            // Appliquer une force lors du clic gauche
-            if (Input.GetMouseButtonDown(0))
+            // Appliquer une force lors du clic gauche / Espace
+
+            if (Input.GetMouseButtonDown(0) || (Input.GetKeyDown(KeyCode.Space)))
             {
+                Debug.Log("Shoot");
                 rb.bodyType = RigidbodyType2D.Dynamic; // Passer le Rigidbody en mode dynamique
                 rb.AddForce(mouseDir * clickForce); // Appliquer une force
 
                 bCanShoot = false;
             }
+
         }
+
     }
 
-    void SpawnMainBall(GameObject prefab) //First Spawn MainBall
+    void SpawnMainBall()
     {
-
-
         // Vérifier si le tableau spawnPoints contient des éléments
         if (spawnPoints.Length > 0)
         {
             // Sélectionner un transform aléatoire dans le tableau spawnPoints
             Transform randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-            // Instancier le prefab MainBall à la position de spawn aléatoire
-            GameObject spawnedBall = Instantiate(prefab, randomSpawnPoint.position, Quaternion.identity);
+            // Instancier la MainBall au point de spawn actif
+            Transform spawnPoint = spawnPoints[currentSpawnIndex];
+            GameObject spawnedBall = Instantiate(MainBall, spawnPoint.position, Quaternion.identity);
+
             // Ajouter la MainBall dans le conteneur
             spawnedBall.transform.SetParent(mainBallContainer);
 
@@ -155,18 +163,28 @@ public class LevelGeneration : MonoBehaviour
             }
             else
             {
-                // Définir le Rigidbody2D comme Kinematic
-                rb.bodyType = RigidbodyType2D.Kinematic;
+                // Définir le Rigidbody2D comme Static
+                rb.bodyType = RigidbodyType2D.Static;
 
                 // Définir la détection des collisions sur Continuous
                 rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            }
+
+            // Mettre à jour la mainBall dans le script Victory
+            if (victoryScript != null)
+            {
+                victoryScript.UpdateMainBall(spawnedBall); // Assigner la nouvelle MainBall
             }
         }
         else
         {
             Debug.LogError("Aucun point de spawn disponible !");
         }
+
+        bCanShoot = true;
     }
+
+
 
     public void RespawnMainBallAtCurrentPoint() //Respawn ball after Death
     {
@@ -192,8 +210,14 @@ public class LevelGeneration : MonoBehaviour
         }
         else
         {
-            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.bodyType = RigidbodyType2D.Static;
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        }
+
+        // Mettre à jour la mainBall dans le script Victory
+        if (victoryScript != null)
+        {
+            victoryScript.UpdateMainBall(spawnedBall); // Assigner la nouvelle MainBall
         }
 
         // Réinitialiser le flag pour permettre de tirer à nouveau

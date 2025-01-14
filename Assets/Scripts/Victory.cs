@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Victory : MonoBehaviour
@@ -12,6 +13,9 @@ public class Victory : MonoBehaviour
     public float cameraZoomSpeed = 1f;  // Vitesse du zoom de la caméra
 
     private float originalSize;  // Taille orthographique initiale de la caméra
+
+    public GameObject explosionEffect;  // Référence au système de particules d'explosion
+
 
     void Start()
     {
@@ -34,6 +38,11 @@ public class Victory : MonoBehaviour
         CheckVictoryCondition();
     }
 
+    public void UpdateMainBall(GameObject newMainBall)
+    {
+        mainBall = newMainBall;
+    }
+
     void CheckVictoryCondition()
     {
         // Trouver tous les objets avec le tag spécifié
@@ -53,6 +62,8 @@ public class Victory : MonoBehaviour
             {
                 Time.timeScale = slowMotionFactor; // Appliquer le ralentissement
 
+                Debug.Log("SLOOOOWMOOOOOW");
+
                 // Zoomer la caméra (réduire la taille orthographique)
                 if (mainCamera != null)
                 {
@@ -66,7 +77,7 @@ public class Victory : MonoBehaviour
             }
             else
             {
-                Time.timeScale = 1.5f; // Réinitialiser la vitesse normale
+                Time.timeScale = 1.25f; // Réinitialiser la vitesse normale
 
                 // Dé-zoomer la caméra (retour à la taille orthographique originale)
                 if (mainCamera != null)
@@ -86,7 +97,7 @@ public class Victory : MonoBehaviour
         }
         else
         {
-            Time.timeScale = 1.5f; // Réinitialiser la vitesse normale si plus d'un objet reste
+            Time.timeScale = 1.25f; // Réinitialiser la vitesse normale si plus d'un objet reste
         }
     }
 
@@ -100,9 +111,23 @@ public class Victory : MonoBehaviour
             victoryScreen.SetActive(true);
         }
 
+        // Lancer l'explosion (si elle existe)
+        if (explosionEffect != null)
+        {
+         
+
+            Instantiate(explosionEffect, mainBall.transform.position, Quaternion.identity);
+
+            Destroy(explosionEffect);
+
+
+
+        }
+
         // Vous pouvez arrêter le jeu ou exécuter d'autres actions ici
         Time.timeScale = 0.666f; // Diminuer le timescale après la victoire
 
         mainCamera.orthographicSize = Mathf.Lerp(originalSize, mainCamera.orthographicSize, cameraZoomSpeed * Time.unscaledDeltaTime);
     }
+
 }
