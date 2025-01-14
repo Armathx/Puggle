@@ -138,4 +138,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Collider: {fileID: 6741511998923959794}
-  go: {fileID: 6362106587068119521}
+  explosionEffect: {fileID: 7648143934663554497, guid: 16164584d576af14485d0cdb2f8c7132, type: 3}
