@@ -7,8 +7,12 @@ public class FlameEffect : MonoBehaviour
     public float flameWidth = 1.0f;        // Espace entre chaque particule
     public int flameCount = 20;            // Nombre de particules de flamme (ajustez selon la taille de l'écran)
 
+    private Transform ParticleContainer;
+
     void Start()
     {
+        ParticleContainer = new GameObject("Flame").transform;
+
         // Obtenir les limites de l'écran
         Camera mainCamera = Camera.main;
         if (mainCamera == null)
@@ -35,7 +39,9 @@ public class FlameEffect : MonoBehaviour
             Vector3 spawnPosition = new Vector3(xPos, -screenHeight / 2f, 0);
 
             // Instancier la particule
-            Instantiate(flameParticlePrefab, spawnPosition, Quaternion.identity);
+            GameObject Flame = Instantiate(flameParticlePrefab, spawnPosition, Quaternion.identity);
+
+            Flame.transform.SetParent(ParticleContainer);
         }
     }
 }

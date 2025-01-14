@@ -12,10 +12,10 @@ public class BoundaryManager : MonoBehaviour
         {
             // Détruire la balle
             Destroy(other.gameObject);
-            Debug.Log("MainBall détruite par la limite inférieure");
+            Debug.Log("MainBall Destroyed");
 
             // Appeler la fonction de respawn
-            levelGeneration.RespawnMainBall();
+            levelGeneration.RespawnMainBallAtCurrentPoint();
         }
     }
 }

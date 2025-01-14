@@ -37,8 +37,32 @@ public class LevelGeneration : MonoBehaviour
     // Liste globale des positions utilisées
     private HashSet<Vector3> usedPositions = new HashSet<Vector3>();
 
+    private Transform mainBallContainer;
+    private Transform objectContainer;
+    private Transform additionalObjectContainer;
+    private Transform killableObjectContainer;
+    private Transform spawnPointContainer;
+
+    void CreateHierarchyContainers()
+    {
+        // Créer des conteneurs pour organiser les objets
+        mainBallContainer = new GameObject("MainBall").transform;
+        objectContainer = new GameObject("BlueDots").transform;
+        additionalObjectContainer = new GameObject("GreenDots").transform;
+        killableObjectContainer = new GameObject("OrangeDots").transform;
+        spawnPointContainer = new GameObject("SpawnPoints").transform;
+    }
+
+
     void Start()
     {
+
+        // Créer des conteneurs pour organiser les objets
+        CreateHierarchyContainers();
+
+        // Générer dynamiquement les points de spawn
+        GenerateSpawnPoints();
+
         // Générer la MainBall et assigner son Rigidbody2D à 'rb'
         SpawnMainBall(MainBall);
 
@@ -48,10 +72,11 @@ public class LevelGeneration : MonoBehaviour
         SpawnObjects(killableObjectToSpawn, killableObjectsCount);
     }
 
+   
     void Update()
     {
         // Gestion des touches pour changer de point de spawn
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.A))
         {
             // Passer au point de spawn précédent
             currentSpawnIndex = (currentSpawnIndex - 1 + spawnPoints.Length) % spawnPoints.Length;
@@ -99,8 +124,10 @@ public class LevelGeneration : MonoBehaviour
         }
     }
 
-    void SpawnMainBall(GameObject prefab)
+    void SpawnMainBall(GameObject prefab) //First Spawn MainBall
     {
+
+
         // Vérifier si le tableau spawnPoints contient des éléments
         if (spawnPoints.Length > 0)
         {
@@ -109,6 +136,8 @@ public class LevelGeneration : MonoBehaviour
 
             // Instancier le prefab MainBall à la position de spawn aléatoire
             GameObject spawnedBall = Instantiate(prefab, randomSpawnPoint.position, Quaternion.identity);
+            // Ajouter la MainBall dans le conteneur
+            spawnedBall.transform.SetParent(mainBallContainer);
 
             // Récupérer le Rigidbody2D de la MainBall instanciée
             rb = spawnedBall.GetComponent<Rigidbody2D>();
@@ -132,43 +161,43 @@ public class LevelGeneration : MonoBehaviour
         }
     }
 
-    public void RespawnMainBall()
-    {
-        // Vérifier si le tableau spawnPoints contient des éléments
-        if (spawnPoints.Length > 0)
-        {
-            // Sélectionner un transform aléatoire dans le tableau spawnPoints
-            Transform randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+    //public void RespawnMainBall()
+    //{
+    //    // Vérifier si le tableau spawnPoints contient des éléments
+    //    if (spawnPoints.Length > 0)
+    //    {
+    //        // Sélectionner un transform aléatoire dans le tableau spawnPoints
+    //        Transform randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-            // Instancier la MainBall à la position de spawn aléatoire
-            GameObject spawnedBall = Instantiate(MainBall, randomSpawnPoint.position, Quaternion.identity);
+    //        // Instancier la MainBall à la position de spawn aléatoire
+    //        GameObject spawnedBall = Instantiate(MainBall, randomSpawnPoint.position, Quaternion.identity);
 
-            // Récupérer le Rigidbody2D de la MainBall instanciée
-            rb = spawnedBall.GetComponent<Rigidbody2D>();
+    //        // Récupérer le Rigidbody2D de la MainBall instanciée
+    //        rb = spawnedBall.GetComponent<Rigidbody2D>();
 
-            if (rb == null)
-            {
-                Debug.LogError("Le prefab MainBall ne possède pas de Rigidbody2D !");
-            }
-            else
-            {
-                // Définir le Rigidbody2D comme Kinematic
-                rb.bodyType = RigidbodyType2D.Kinematic;
+    //        if (rb == null)
+    //        {
+    //            Debug.LogError("Le prefab MainBall ne possède pas de Rigidbody2D !");
+    //        }
+    //        else
+    //        {
+    //            // Définir le Rigidbody2D comme Kinematic
+    //            rb.bodyType = RigidbodyType2D.Kinematic;
 
-                // Définir la détection des collisions sur Continuous
-                rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-            }
-        }
-        else
-        {
-            Debug.LogError("Aucun point de spawn disponible !");
-        }
+    //            // Définir la détection des collisions sur Continuous
+    //            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("Aucun point de spawn disponible !");
+    //    }
 
-        // Réinitialiser le flag pour pouvoir tirer à nouveau après le respawn
-        bCanShoot = true;
-    }
+    //    // Réinitialiser le flag pour pouvoir tirer à nouveau après le respawn
+    //    bCanShoot = true;
+    //}//Obsolete
 
-    public void RespawnMainBallAtCurrentPoint()
+    public void RespawnMainBallAtCurrentPoint() //Respawn ball after Death
     {
         // Supprimer la balle actuelle si elle existe
         if (rb != null)
@@ -179,6 +208,9 @@ public class LevelGeneration : MonoBehaviour
         // Instancier la MainBall au point de spawn actif
         Transform spawnPoint = spawnPoints[currentSpawnIndex];
         GameObject spawnedBall = Instantiate(MainBall, spawnPoint.position, Quaternion.identity);
+
+        // Ajouter la MainBall dans le conteneur
+        spawnedBall.transform.SetParent(mainBallContainer);
 
         // Récupérer et configurer le Rigidbody2D de la balle instanciée
         rb = spawnedBall.GetComponent<Rigidbody2D>();
@@ -196,7 +228,7 @@ public class LevelGeneration : MonoBehaviour
         bCanShoot = true;
     }
 
-    void SpawnObjects(GameObject prefab, int count)
+    void SpawnObjects(GameObject prefab, int count)//Spawn All Objects hitable
     {
         // Obtenir les limites de l'écran
         Camera mainCamera = Camera.main;
@@ -253,8 +285,57 @@ public class LevelGeneration : MonoBehaviour
             // Instancier l'objet si une position valide a été trouvée
             if (attempts <= 100)
             {
-                Instantiate(prefab, spawnPosition, Quaternion.identity);
+                GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
+
+                // Ajouter l'objet dans le conteneur approprié
+                if (prefab == objectToSpawn)
+                    spawnedObject.transform.SetParent(objectContainer);
+                else if (prefab == additionalObjectToSpawn)
+                    spawnedObject.transform.SetParent(additionalObjectContainer);
+                else if (prefab == killableObjectToSpawn)
+                    spawnedObject.transform.SetParent(killableObjectContainer);
             }
         }
     }
+
+    void GenerateSpawnPoints()
+    {
+        // Obtenir les dimensions de l'écran
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogError("Aucune caméra principale trouvée !");
+            return;
+        }
+
+        float screenWidth = 2f * mainCamera.orthographicSize * mainCamera.aspect;
+
+        // Position verticale (hauteur constante)
+        float yPosition = 4f;
+
+        // Calcul de l'espacement entre les points
+        float spacing = screenWidth / 6f; // Diviser par 6 pour laisser de l'espace sur les bords
+
+        // Générer les points de spawn
+        List<Transform> points = new List<Transform>();
+        for (int i = 0; i < 5; i++)
+        {
+            // Calculer la position du point
+            float xPosition = -screenWidth / 2f + spacing * (i + 1);
+
+            // Créer un nouveau GameObject pour représenter le point de spawn
+            GameObject spawnPoint = new GameObject($"SpawnPoint_{i + 1}");
+            spawnPoint.transform.position = new Vector3(xPosition, yPosition, 0f);
+
+            // Ajouter le point comme enfant du conteneur
+            spawnPoint.transform.SetParent(spawnPointContainer.transform);
+
+            // Ajouter le Transform à la liste
+            points.Add(spawnPoint.transform);
+        }
+
+        // Assigner les points générés au tableau spawnPoints
+        spawnPoints = points.ToArray();
+    }
+
 }
