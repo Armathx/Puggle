@@ -343,7 +343,7 @@ public class LevelGeneration : MonoBehaviour
                     Debug.LogWarning("Impossible de trouver une position valide après 100 tentatives.");
                     break;
                 }
-            } while (attempts <= 100);
+            } while (true);
 
             // Instancier l'objet si une position valide a été trouvée
             if (attempts <= 100)
