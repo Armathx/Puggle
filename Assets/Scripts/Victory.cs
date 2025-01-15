@@ -1,4 +1,7 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Victory : MonoBehaviour
@@ -16,7 +19,12 @@ public class Victory : MonoBehaviour
 
     public GameObject explosionEffect;  // Référence au système de particules d'explosion
 
+    public LevelGeneration levelGeneration;
 
+    public PuggleAgent puggleAgent;
+
+
+    bool bYouWin = false;
     void Start()
     {
         // Assurez-vous que le victoryScreen est désactivé au départ
@@ -35,7 +43,12 @@ public class Victory : MonoBehaviour
 
     void Update()
     {
-        CheckVictoryCondition();
+        if (!bYouWin)
+        {
+            CheckVictoryCondition();
+        }
+
+
     }
 
     public void UpdateMainBall(GameObject newMainBall)
@@ -45,8 +58,9 @@ public class Victory : MonoBehaviour
 
     void CheckVictoryCondition()
     {
-        // Trouver tous les objets avec le tag spécifié
-        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tagToCheck);
+        // Trouver tous les objets avec le tag spécifié(Version LINQ
+        GameObject[] objectsWithTag = levelGeneration.marbles.Where(x => x != null).Where(x =>x.CompareTag(tagToCheck)).ToArray();
+
 
         // Si un seul objet reste et que la distance à la balle principale est inférieure à la valeur donnée
         if (objectsWithTag.Length == 1)
@@ -60,9 +74,8 @@ public class Victory : MonoBehaviour
             // Si la distance est inférieure à la distance maximale
             if (distance < maxDistance)
             {
-                Time.timeScale = slowMotionFactor; // Appliquer le ralentissement
+                //    Time.timeScale = slowMotionFactor; // Appliquer le ralentissement
 
-                Debug.Log("SLOOOOWMOOOOOW");
 
                 // Zoomer la caméra (réduire la taille orthographique)
                 if (mainCamera != null)
@@ -77,7 +90,7 @@ public class Victory : MonoBehaviour
             }
             else
             {
-                Time.timeScale = 1.25f; // Réinitialiser la vitesse normale
+             /*   Time.timeScale = 1.25f;*/ // Réinitialiser la vitesse normale
 
                 // Dé-zoomer la caméra (retour à la taille orthographique originale)
                 if (mainCamera != null)
@@ -97,37 +110,41 @@ public class Victory : MonoBehaviour
         }
         else
         {
-            Time.timeScale = 1.25f; // Réinitialiser la vitesse normale si plus d'un objet reste
+            /* Time.timeScale = 1.25f; */// Réinitialiser la vitesse normale si plus d'un objet reste
         }
     }
 
     void OnVictory()
     {
         Debug.Log("Victoire !");
-
+        bYouWin = true;
         // Activer l'écran de victoire s'il existe
         if (victoryScreen != null)
         {
             victoryScreen.SetActive(true);
         }
 
-        // Lancer l'explosion (si elle existe)
-        if (explosionEffect != null)
-        {
-         
+        puggleAgent.AddReward(400.0f);
 
-            Instantiate(explosionEffect, mainBall.transform.position, Quaternion.identity);
+        puggleAgent.EndEpisode();
 
-            Destroy(explosionEffect);
+        levelGeneration.Init();
 
 
 
-        }
+
+        //// Lancer l'explosion (si elle existe)
+        //if (explosionEffect != null)
+        //{
+        //    Instantiate(explosionEffect, mainBall.transform.position, Quaternion.identity);
+
+        //    Destroy(explosionEffect);
+        //}
 
         // Vous pouvez arrêter le jeu ou exécuter d'autres actions ici
-        Time.timeScale = 0.666f; // Diminuer le timescale après la victoire
+        //Time.timeScale = 1.0f; // Diminuer le timescale après la victoire
 
-        mainCamera.orthographicSize = Mathf.Lerp(originalSize, mainCamera.orthographicSize, cameraZoomSpeed * Time.unscaledDeltaTime);
+        //mainCamera.orthographicSize = Mathf.Lerp(originalSize, mainCamera.orthographicSize, cameraZoomSpeed * Time.unscaledDeltaTime);
     }
 
 }

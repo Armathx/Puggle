@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2851363109630106757}
   - component: {fileID: 1241346627191182200}
   - component: {fileID: 3076360317998562351}
+  - component: {fileID: 6326021905829858789}
+  - component: {fileID: 5002364773393886074}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -46,18 +48,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa5f152cb7bf9b4b902946e8f22bc3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MainBall: {fileID: 2318025199614130294, guid: 21035d0f8cdcf4a46b2d3d0d6ede2fc6, type: 3}
   objectToSpawn: {fileID: 6362106587068119521, guid: a2535a6f185baa841942fc12b3aeaf77, type: 3}
   additionalObjectToSpawn: {fileID: 4826956339257901276, guid: f08d82d7d1b277e479c87f6851fa250c, type: 3}
   killableObjectToSpawn: {fileID: 4697034577688156535, guid: 648453e798b3c49428f314d03877afb9, type: 3}
-  minObjects: 30
-  maxObjects: 100
+  minObjects: 0
+  maxObjects: 0
   additionalObjectsCount: 1
-  killableObjectsCount: 2
+  killableObjectsCount: 0
   sphereDiameter: 0.4
   Once: 1
-  lineRenderer: {fileID: 0}
-  rb: {fileID: 0}
+  lineRenderer: {fileID: 3076360317998562351}
+  spawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  rb: {fileID: 5122650456381606371, guid: 21035d0f8cdcf4a46b2d3d0d6ede2fc6, type: 3}
   clickForce: 500
+  shootCount: 0
+  victoryScript: {fileID: 1241346627191182200}
+  marbles: []
 --- !u!114 &1241346627191182200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,11 +85,14 @@ MonoBehaviour:
   tagToCheck: Green
   victoryScreen: {fileID: 0}
   slowMotionFactor: 0.25
-  mainBall: {fileID: 0}
+  mainBall: {fileID: 2318025199614130294, guid: 21035d0f8cdcf4a46b2d3d0d6ede2fc6, type: 3}
   mainCamera: {fileID: 0}
-  maxDistance: 1
+  maxDistance: 1.2
   cameraZoomFactor: 2
   cameraZoomSpeed: 3
+  explosionEffect: {fileID: 7648143934663554497, guid: 6c297c201633bfa45992d3055bab2c72, type: 3}
+  levelGeneration: {fileID: 2851363109630106757}
+  puggleAgent: {fileID: 5002364773393886074}
 --- !u!120 &3076360317998562351
 LineRenderer:
   serializedVersion: 2
@@ -102,7 +117,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 9683ca4b1f776f04f855f10e0efc51df, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -133,8 +148,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
+        time: 0.005554199
+        value: 0.18572235
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -185,3 +200,52 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &6326021905829858789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8033572519972356032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 300
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 2
+      BranchSizes: 
+    VectorActionSize: 02000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 1
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: Puggle
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_DeterministicInference: 0
+  m_ObservableAttributeHandling: 0
+--- !u!114 &5002364773393886074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8033572519972356032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af0cde4cc44b31249ba6b1ab419e0026, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 50000
+  levelGeneration: {fileID: 2851363109630106757}
+  maxObservationNb: 300

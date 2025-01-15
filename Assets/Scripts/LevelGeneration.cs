@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class LevelGeneration : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class LevelGeneration : MonoBehaviour
     public Rigidbody2D rb;
     public int clickForce = 500;
 
+
     // Liste globale des positions utilisées
     private HashSet<Vector3> usedPositions = new HashSet<Vector3>();
 
@@ -46,7 +48,11 @@ public class LevelGeneration : MonoBehaviour
     private Transform killableObjectContainer;
     private Transform spawnPointContainer;
 
+    public int shootCount = 0;
+
     public Victory victoryScript; // Référence au script Victory
+
+    public List<GameObject> marbles;
 
     void CreateHierarchyContainers()
     {
@@ -59,14 +65,46 @@ public class LevelGeneration : MonoBehaviour
     }
 
 
-    void Start()
+
+    private void Start()
     {
+
+        victoryScript.levelGeneration = this;
 
         // Créer des conteneurs pour organiser les objets
         CreateHierarchyContainers();
 
         // Générer dynamiquement les points de spawn
         GenerateSpawnPoints();
+
+        Init();
+
+
+
+    }
+
+    public void Init()
+    {
+        shootCount = 0;
+        usedPositions.Clear();
+        marbles.Clear();
+
+        foreach (Transform t in mainBallContainer)
+        {
+            Destroy(t.gameObject);
+        }
+        foreach (Transform t in objectContainer)
+        {
+            Destroy(t.gameObject);
+        }
+        foreach (Transform t in additionalObjectContainer)
+        {
+            Destroy(t.gameObject);
+        }
+        foreach (Transform t in killableObjectContainer)
+        {
+            Destroy(t.gameObject);
+        }
 
         // Générer la MainBall et assigner son Rigidbody2D à 'rb'
         SpawnMainBall();
@@ -75,9 +113,11 @@ public class LevelGeneration : MonoBehaviour
         SpawnObjects(objectToSpawn, Random.Range(minObjects, maxObjects));
         SpawnObjects(additionalObjectToSpawn, additionalObjectsCount);
         SpawnObjects(killableObjectToSpawn, killableObjectsCount);
+
+
     }
 
-   
+
     void Update()
     {
         // Gestion des touches pour changer de point de spawn
@@ -105,11 +145,11 @@ public class LevelGeneration : MonoBehaviour
             RespawnMainBallAtCurrentPoint();
         }
 
-        Shoot();
+        Aim();
     }
 
 
-    void Shoot()
+    void Aim()
     {
         if (bCanShoot)
         {
@@ -124,19 +164,28 @@ public class LevelGeneration : MonoBehaviour
             lineRenderer.SetPosition(0, mousePos);
             lineRenderer.SetPosition(1, rb.transform.position);
 
+
             // Appliquer une force lors du clic gauche / Espace
 
             if (Input.GetMouseButtonDown(0) || (Input.GetKeyDown(KeyCode.Space)))
             {
-                Debug.Log("Shoot");
-                rb.bodyType = RigidbodyType2D.Dynamic; // Passer le Rigidbody en mode dynamique
-                rb.AddForce(mouseDir * clickForce); // Appliquer une force
 
-                bCanShoot = false;
+                Shoot(mouseDir);
             }
 
         }
 
+    }
+
+    public void Shoot(Vector3 dir)
+    {
+        Debug.Log("Shoot");
+        rb.bodyType = RigidbodyType2D.Dynamic; // Passer le Rigidbody en mode dynamique
+        rb.AddForce(dir * clickForce); // Appliquer une force
+
+        bCanShoot = false;
+
+        shootCount++;
     }
 
     void SpawnMainBall()
@@ -182,9 +231,10 @@ public class LevelGeneration : MonoBehaviour
         }
 
         bCanShoot = true;
+
+        victoryScript.puggleAgent.RequestDecision();
+
     }
-
-
 
     public void RespawnMainBallAtCurrentPoint() //Respawn ball after Death
     {
@@ -222,6 +272,23 @@ public class LevelGeneration : MonoBehaviour
 
         // Réinitialiser le flag pour permettre de tirer à nouveau
         bCanShoot = true;
+
+        if (shootCount > 40)
+        {
+            victoryScript.puggleAgent.AddReward(-40.0f);
+            victoryScript.puggleAgent.EndEpisode();
+
+            Init();
+        }
+        else
+        {
+            victoryScript.puggleAgent.AddReward(-0.1f);
+            victoryScript.puggleAgent.RequestDecision();
+        }
+
+
+
+
     }
 
     void SpawnObjects(GameObject prefab, int count)//Spawn All Objects hitable
@@ -252,7 +319,7 @@ public class LevelGeneration : MonoBehaviour
             {
                 float randomX = Random.Range(minX, maxX);
                 float randomY = Random.Range(minY, maxY);
-                spawnPosition = new Vector3(randomX, randomY, 0);
+                spawnPosition = new Vector3(randomX, randomY, transform.position.z)+transform.position;
 
                 bool positionValid = true;
                 foreach (Vector3 usedPosition in usedPositions)
@@ -282,6 +349,7 @@ public class LevelGeneration : MonoBehaviour
             if (attempts <= 100)
             {
                 GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
+                marbles.Add(spawnedObject);
 
                 // Ajouter l'objet dans le conteneur approprié
                 if (prefab == objectToSpawn)
@@ -321,7 +389,7 @@ public class LevelGeneration : MonoBehaviour
 
             // Créer un nouveau GameObject pour représenter le point de spawn
             GameObject spawnPoint = new GameObject($"SpawnPoint_{i + 1}");
-            spawnPoint.transform.position = new Vector3(xPosition, yPosition, 0f);
+            spawnPoint.transform.position = new Vector3(xPosition, yPosition, transform.position.z)+transform.position;
 
             // Ajouter un visuel pour représenter le point de spawn
             GameObject visual = CreateSpawnPointVisual(spawnPoint.transform);
