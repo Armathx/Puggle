@@ -464,7 +464,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1813311916362465036, guid: a8a98fa00bf052644acf6d8894ff2f75, type: 3}
       propertyPath: flameCount
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1813311916362465036, guid: a8a98fa00bf052644acf6d8894ff2f75, type: 3}
       propertyPath: flameWidth
@@ -565,11 +565,11 @@ PrefabInstance:
       objectReference: {fileID: 2318025199614130294, guid: 21035d0f8cdcf4a46b2d3d0d6ede2fc6, type: 3}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: maxObjects
-      value: 200
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: minObjects
-      value: 100
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: lineRenderer
@@ -580,12 +580,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2090250661}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
+      propertyPath: directionArrow
+      value: 
+      objectReference: {fileID: 5250287029867741797, guid: 922c5f2e15f04384aa0830bc33f3520d, type: 3}
+    - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: killableObjectsCount
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: additionalObjectsCount
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2851363109630106757, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: spawnPoints.Array.size
@@ -611,6 +615,10 @@ PrefabInstance:
       propertyPath: 'spawnPoints.Array.data[4]'
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3076360317998562351, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9683ca4b1f776f04f855f10e0efc51df, type: 2}
     - target: {fileID: 3076360317998562351, guid: 94930185bd996b44ba3aa1384eaa19b2, type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
       value: 0.005554199
