@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System.Diagnostics.Contracts;
+using TMPro;
 
 public class LevelGeneration : MonoBehaviour
 {
@@ -25,6 +27,10 @@ public class LevelGeneration : MonoBehaviour
     public LineRenderer lineRenderer;
     bool bCanShoot = true;
 
+    public int lifesMainBall = 5;
+    int ballsCount;
+
+
     // Section: Spawn Points
     [Header("Points de Spawn")]
     public Transform[] spawnPoints;
@@ -48,6 +54,8 @@ public class LevelGeneration : MonoBehaviour
     private Transform killableObjectContainer;
     private Transform spawnPointContainer;
 
+    public TextMeshProUGUI textMeshProUGUI;
+
     public int shootCount = 0;
 
     public Victory victoryScript; // Référence au script Victory
@@ -65,7 +73,6 @@ public class LevelGeneration : MonoBehaviour
     }
 
 
-
     private void Start()
     {
 
@@ -78,8 +85,6 @@ public class LevelGeneration : MonoBehaviour
         GenerateSpawnPoints();
 
         Init();
-
-
 
     }
 
@@ -114,45 +119,44 @@ public class LevelGeneration : MonoBehaviour
         SpawnObjects(additionalObjectToSpawn, additionalObjectsCount);
         SpawnObjects(killableObjectToSpawn, killableObjectsCount);
 
+        ballsCount = lifesMainBall;
+
+        textMeshProUGUI.text = "Balls remaining : "+ ballsCount.ToString();
 
     }
 
 
     void Update()
     {
-        // Gestion des touches pour changer de point de spawn
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            // Passer au point de spawn précédent
-            currentSpawnIndex = (currentSpawnIndex - 1 + spawnPoints.Length) % spawnPoints.Length;
-            Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
-
-            RespawnMainBallAtCurrentPoint();
-        }
-
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            // Passer au point de spawn suivant
-            currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
-            Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
-
-            RespawnMainBallAtCurrentPoint();
-        }
-
-        // Réapparaître la balle au point de spawn actif avec une touche spécifique (par exemple, R)
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            RespawnMainBallAtCurrentPoint();
-        }
-
         Aim();
     }
 
 
     void Aim()
     {
+
         if (bCanShoot)
         {
+
+            // Gestion des touches pour changer de point de spawn
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                // Passer au point de spawn précédent
+                currentSpawnIndex = (currentSpawnIndex - 1 + spawnPoints.Length) % spawnPoints.Length;
+                Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
+
+                RespawnMainBallAtCurrentPoint();
+            }
+
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                // Passer au point de spawn suivant
+                currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
+                Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
+
+                RespawnMainBallAtCurrentPoint();
+            }
+
             // Récupérer la position de la souris en coordonnées mondiales
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePos.z = 0f; // Assurer une position Z correcte pour un jeu 2D
@@ -169,7 +173,6 @@ public class LevelGeneration : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0) || (Input.GetKeyDown(KeyCode.Space)))
             {
-
                 Shoot(mouseDir);
             }
 
@@ -186,6 +189,9 @@ public class LevelGeneration : MonoBehaviour
         bCanShoot = false;
 
         shootCount++;
+        ballsCount--;
+
+        textMeshProUGUI.text = "Balls remaining : " + ballsCount.ToString();
     }
 
     void SpawnMainBall()
@@ -272,21 +278,22 @@ public class LevelGeneration : MonoBehaviour
 
         // Réinitialiser le flag pour permettre de tirer à nouveau
         bCanShoot = true;
+      
 
-        if (shootCount > 40)
+        if (ballsCount <= 0)
         {
-            victoryScript.puggleAgent.AddReward(-40.0f);
-            victoryScript.puggleAgent.EndEpisode();
+
+            Debug.Log("PERDUE");
+            //victoryScript.puggleAgent.AddReward(-40.0f);
+            //victoryScript.puggleAgent.EndEpisode();
 
             Init();
         }
         else
         {
-            victoryScript.puggleAgent.AddReward(-0.1f);
-            victoryScript.puggleAgent.RequestDecision();
+            //victoryScript.puggleAgent.AddReward(-0.1f);
+            //victoryScript.puggleAgent.RequestDecision();
         }
-
-
 
 
     }
@@ -319,7 +326,7 @@ public class LevelGeneration : MonoBehaviour
             {
                 float randomX = Random.Range(minX, maxX);
                 float randomY = Random.Range(minY, maxY);
-                spawnPosition = new Vector3(randomX, randomY, transform.position.z)+transform.position;
+                spawnPosition = new Vector3(randomX, randomY, 0)+transform.position;
 
                 bool positionValid = true;
                 foreach (Vector3 usedPosition in usedPositions)
@@ -389,7 +396,7 @@ public class LevelGeneration : MonoBehaviour
 
             // Créer un nouveau GameObject pour représenter le point de spawn
             GameObject spawnPoint = new GameObject($"SpawnPoint_{i + 1}");
-            spawnPoint.transform.position = new Vector3(xPosition, yPosition, transform.position.z)+transform.position;
+            spawnPoint.transform.position = new Vector3(xPosition, yPosition, -0.01f)+transform.position;
 
             // Ajouter un visuel pour représenter le point de spawn
             GameObject visual = CreateSpawnPointVisual(spawnPoint.transform);

@@ -16,6 +16,7 @@ public class BoundaryManager : MonoBehaviour
 
             // Appeler la fonction de respawn
             levelGeneration.RespawnMainBallAtCurrentPoint();
+
         }
     }
 }

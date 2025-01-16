@@ -52,10 +52,10 @@ MonoBehaviour:
   objectToSpawn: {fileID: 6362106587068119521, guid: a2535a6f185baa841942fc12b3aeaf77, type: 3}
   additionalObjectToSpawn: {fileID: 4826956339257901276, guid: f08d82d7d1b277e479c87f6851fa250c, type: 3}
   killableObjectToSpawn: {fileID: 4697034577688156535, guid: 648453e798b3c49428f314d03877afb9, type: 3}
-  minObjects: 0
-  maxObjects: 0
+  minObjects: 50
+  maxObjects: 85
   additionalObjectsCount: 1
-  killableObjectsCount: 0
+  killableObjectsCount: 4
   sphereDiameter: 0.4
   Once: 1
   lineRenderer: {fileID: 3076360317998562351}
