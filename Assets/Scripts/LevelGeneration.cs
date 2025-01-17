@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Diagnostics.Contracts;
 using TMPro;
+using System.Linq.Expressions;
 
 public class LevelGeneration : MonoBehaviour
 {
@@ -31,6 +32,9 @@ public class LevelGeneration : MonoBehaviour
     [Header("Statistics")]
     public int lifesMainBall = 5;
     int ballsCount;
+    int TotalScore;
+    int TempScore;
+
 
     // Section: Spawn Points
     [Header("Points de Spawn")]
@@ -53,13 +57,27 @@ public class LevelGeneration : MonoBehaviour
     private Transform killableObjectContainer;
     private Transform spawnPointContainer;
 
-    public TextMeshProUGUI textMeshProUGUI;
+    public TextMeshProUGUI textMeshProUGUILife;
+    public TextMeshProUGUI textMeshProUGUIScore;
 
     public int shootCount = 0;
 
     public Victory victoryScript; // Référence au script Victory
 
     public List<GameObject> marbles;
+
+    private void OnEnable()
+    {
+        // S'abonner à l'événement
+        GetScore.OnScoreChanged += UpdateScoreDisplay;
+    }
+
+    private void OnDisable()
+    {
+        // Se désabonner de l'événement pour éviter les erreurs
+        GetScore.OnScoreChanged -= UpdateScoreDisplay;
+    }
+
 
     void CreateHierarchyContainers()
     {
@@ -82,10 +100,15 @@ public class LevelGeneration : MonoBehaviour
 
         // Générer dynamiquement les points de spawn
         GenerateSpawnPoints();
+        //// Mettre à jour l'affichage du score au démarrage
+        UpdateScoreDisplay(TotalScore);
 
         Init();
 
     }
+
+
+
 
     public void Init()
     {
@@ -113,6 +136,8 @@ public class LevelGeneration : MonoBehaviour
         // Générer la MainBall et assigner son Rigidbody2D à 'rb'
         SpawnMainBall();
 
+        GetScore.totalScore = 0;
+
         // Générer les objets
         SpawnObjects(objectToSpawn, Random.Range(minObjects, maxObjects));
         SpawnObjects(additionalObjectToSpawn, additionalObjectsCount);
@@ -120,7 +145,7 @@ public class LevelGeneration : MonoBehaviour
 
         ballsCount = lifesMainBall;
 
-        textMeshProUGUI.text = "Balls remaining : " + ballsCount.ToString();
+        textMeshProUGUILife.text = "Balls remaining : " + ballsCount.ToString();
 
     }
 
@@ -128,7 +153,42 @@ public class LevelGeneration : MonoBehaviour
     void Update()
     {
         Aim();
+      
+    }
 
+    #region ---------------ScoreDisplay---------------
+
+    private void UpdateScoreDisplay(int newScore)
+    {
+        if (textMeshProUGUIScore != null)
+        {
+            textMeshProUGUIScore.text = "Score: " + (newScore).ToString();
+
+        }
+        else
+        {
+            Debug.LogWarning("TextMeshProUGUI non assigné !");
+        }
+
+
+    }
+
+    #endregion
+
+    #region ---------------MainBall---------------
+
+    public void Shoot(Vector3 dir)
+    {
+        Debug.Log("Shoot");
+        rb.bodyType = RigidbodyType2D.Dynamic; // Passer le Rigidbody en mode dynamique
+        rb.AddForce(dir * clickForce); // Appliquer une force
+
+        bCanShoot = false;
+
+        shootCount++;
+        ballsCount--;
+
+        textMeshProUGUILife.text = "Balls remaining : " + ballsCount.ToString();
     }
 
 
@@ -180,19 +240,6 @@ public class LevelGeneration : MonoBehaviour
 
     }
 
-    public void Shoot(Vector3 dir)
-    {
-        Debug.Log("Shoot");
-        rb.bodyType = RigidbodyType2D.Dynamic; // Passer le Rigidbody en mode dynamique
-        rb.AddForce(dir * clickForce); // Appliquer une force
-
-        bCanShoot = false;
-
-        shootCount++;
-        ballsCount--;
-
-        textMeshProUGUI.text = "Balls remaining : " + ballsCount.ToString();
-    }
 
     void SpawnMainBall()
     {
@@ -250,6 +297,7 @@ public class LevelGeneration : MonoBehaviour
             Destroy(rb.gameObject);
         }
 
+       
         // Instancier la MainBall au point de spawn actif
         Transform spawnPoint = spawnPoints[currentSpawnIndex];
         GameObject spawnedBall = Instantiate(MainBall, spawnPoint.position, Quaternion.identity);
@@ -297,6 +345,93 @@ public class LevelGeneration : MonoBehaviour
 
 
     }
+
+    #endregion
+
+    #region ---------------Spawn---------------
+
+    void GenerateSpawnPoints()
+    {
+        // Obtenir les dimensions de l'écran
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogError("Aucune caméra principale trouvée !");
+            return;
+        }
+
+        float screenWidth = 2f * mainCamera.orthographicSize * mainCamera.aspect;
+
+        // Position verticale (hauteur constante)
+        float yPosition = 4f;
+
+        // Calcul de l'espacement entre les points
+        float spacing = screenWidth / 6f; // Diviser par 6 pour laisser de l'espace sur les bords
+
+        // Générer les points de spawn
+        List<Transform> points = new List<Transform>();
+        for (int i = 0; i < 5; i++)
+        {
+            // Calculer la position du point
+            float xPosition = -screenWidth / 2f + spacing * (i + 1);
+
+            // Créer un nouveau GameObject pour représenter le point de spawn
+            GameObject spawnPoint = new GameObject($"SpawnPoint_{i + 1}");
+            spawnPoint.transform.position = new Vector3(xPosition, yPosition, -0.01f) + transform.position;
+
+            // Ajouter un visuel pour représenter le point de spawn
+            GameObject visual = CreateSpawnPointVisual(spawnPoint.transform);
+            visual.transform.SetParent(spawnPoint.transform); // Faire du cercle un enfant du point
+
+            // Ajouter le point comme enfant du conteneur
+            spawnPoint.transform.SetParent(spawnPointContainer.transform);
+
+            // Ajouter le Transform à la liste
+            points.Add(spawnPoint.transform);
+        }
+
+        // Assigner les points générés au tableau spawnPoints
+        spawnPoints = points.ToArray();
+    }
+    // Crée un cercle visuel pour représenter un point de spawn
+    GameObject CreateSpawnPointVisual(Transform parent)
+    {
+        // Créer un GameObject pour le visuel
+        GameObject circle = new GameObject("Visual");
+
+        // Ajouter un composant SpriteRenderer pour afficher un cercle
+        SpriteRenderer renderer = circle.AddComponent<SpriteRenderer>();
+        renderer.sprite = GenerateCircleSprite();
+        renderer.color = Color.red; // Couleur du cercle
+
+        // Réduire la taille pour qu'il soit petit
+        circle.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
+
+        // Positionner au centre du point de spawn
+        circle.transform.position = parent.position;
+
+        return circle;
+    }
+    // Génère un Sprite circulaire à utiliser pour les visuels
+    Sprite GenerateCircleSprite()
+    {
+        Texture2D texture = new Texture2D(128, 128);
+        for (int y = 0; y < texture.height; y++)
+        {
+            for (int x = 0; x < texture.width; x++)
+            {
+                // Calculer la distance au centre
+                float distance = Vector2.Distance(new Vector2(x, y), new Vector2(64, 64));
+                texture.SetPixel(x, y, distance <= 64 ? Color.white : Color.clear);
+            }
+        }
+        texture.Apply();
+
+        // Créer le sprite à partir de la texture
+        return Sprite.Create(texture, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
+    }
+
+
 
     void SpawnObjects(GameObject prefab, int count)//Spawn All Objects hitable
     {
@@ -369,89 +504,8 @@ public class LevelGeneration : MonoBehaviour
         }
     }
 
+    #endregion
 
 
-    void GenerateSpawnPoints()
-    {
-        // Obtenir les dimensions de l'écran
-        Camera mainCamera = Camera.main;
-        if (mainCamera == null)
-        {
-            Debug.LogError("Aucune caméra principale trouvée !");
-            return;
-        }
-
-        float screenWidth = 2f * mainCamera.orthographicSize * mainCamera.aspect;
-
-        // Position verticale (hauteur constante)
-        float yPosition = 4f;
-
-        // Calcul de l'espacement entre les points
-        float spacing = screenWidth / 6f; // Diviser par 6 pour laisser de l'espace sur les bords
-
-        // Générer les points de spawn
-        List<Transform> points = new List<Transform>();
-        for (int i = 0; i < 5; i++)
-        {
-            // Calculer la position du point
-            float xPosition = -screenWidth / 2f + spacing * (i + 1);
-
-            // Créer un nouveau GameObject pour représenter le point de spawn
-            GameObject spawnPoint = new GameObject($"SpawnPoint_{i + 1}");
-            spawnPoint.transform.position = new Vector3(xPosition, yPosition, -0.01f) + transform.position;
-
-            // Ajouter un visuel pour représenter le point de spawn
-            GameObject visual = CreateSpawnPointVisual(spawnPoint.transform);
-            visual.transform.SetParent(spawnPoint.transform); // Faire du cercle un enfant du point
-
-            // Ajouter le point comme enfant du conteneur
-            spawnPoint.transform.SetParent(spawnPointContainer.transform);
-
-            // Ajouter le Transform à la liste
-            points.Add(spawnPoint.transform);
-        }
-
-        // Assigner les points générés au tableau spawnPoints
-        spawnPoints = points.ToArray();
-    }
-
-    // Crée un cercle visuel pour représenter un point de spawn
-    GameObject CreateSpawnPointVisual(Transform parent)
-    {
-        // Créer un GameObject pour le visuel
-        GameObject circle = new GameObject("Visual");
-
-        // Ajouter un composant SpriteRenderer pour afficher un cercle
-        SpriteRenderer renderer = circle.AddComponent<SpriteRenderer>();
-        renderer.sprite = GenerateCircleSprite();
-        renderer.color = Color.red; // Couleur du cercle
-
-        // Réduire la taille pour qu'il soit petit
-        circle.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
-
-        // Positionner au centre du point de spawn
-        circle.transform.position = parent.position;
-
-        return circle;
-    }
-
-    // Génère un Sprite circulaire à utiliser pour les visuels
-    Sprite GenerateCircleSprite()
-    {
-        Texture2D texture = new Texture2D(128, 128);
-        for (int y = 0; y < texture.height; y++)
-        {
-            for (int x = 0; x < texture.width; x++)
-            {
-                // Calculer la distance au centre
-                float distance = Vector2.Distance(new Vector2(x, y), new Vector2(64, 64));
-                texture.SetPixel(x, y, distance <= 64 ? Color.white : Color.clear);
-            }
-        }
-        texture.Apply();
-
-        // Créer le sprite à partir de la texture
-        return Sprite.Create(texture, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
-    }
 
 }

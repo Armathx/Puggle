@@ -9,6 +9,7 @@ TagManager:
   - Blue
   - Killable
   - MainBall
+  - Orange
   layers:
   - Default
   - TransparentFX

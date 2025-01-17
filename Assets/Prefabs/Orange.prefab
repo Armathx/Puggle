@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -8700044406285419991}
   m_Layer: 0
   m_Name: Orange
-  m_TagString: Killable
+  m_TagString: Orange
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,5 +137,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0041eb62387e0418ae2b0d01d394c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Collider: {fileID: 7329815990246879486}
   explosionEffect: {fileID: 7648143934663554497, guid: 9fa925db732865c45b9743d2125bd294, type: 3}

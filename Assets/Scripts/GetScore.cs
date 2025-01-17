@@ -1,33 +1,33 @@
-using TMPro;
 using UnityEngine;
 
 public class GetScore : MonoBehaviour
 {
+    // Définir un délégué pour les changements de score
+    public delegate void ScoreChanged(int newScore);
+    public static event ScoreChanged OnScoreChanged;
 
-    public TextMeshProUGUI textMeshProUGUI;
-    public int TotalScore = 0;
+    public static int totalScore;
 
-    public void Update()
+    void OnCollisionEnter2D(Collision2D collision)
     {
+        GameObject other = collision.gameObject;
 
-        textMeshProUGUI.text = "Balls remaining : " + TotalScore.ToString();
-
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if ((collision.collider.CompareTag("Blue")))
+        if (other.CompareTag("Blue"))
         {
-            TotalScore = TotalScore + 100;
+            Debug.Log("BLUE");
+
+            totalScore += 1000; // Ajoute des points
         }
-        else if ((collision.collider.CompareTag("Green")))
+        else if (other.CompareTag("Green"))
         {
-
+            totalScore += 2222; // Ajoute plus de points
         }
-        else if ((collision.collider.CompareTag("Orange")))
+        else if (other.CompareTag("Orange"))
         {
-
+            totalScore -= 525; // Retire des points
         }
 
+        // Déclenche l'événement via le délégué
+        OnScoreChanged?.Invoke(totalScore);
     }
 }

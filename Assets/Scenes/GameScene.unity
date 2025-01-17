@@ -256,6 +256,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &612879507 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1421981995704668590, guid: f2e295acd0ecb8740ac18d42aeeb9db9, type: 3}
+  m_PrefabInstance: {fileID: 426499500285752023}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,6 +638,14 @@ PrefabInstance:
       propertyPath: textMeshProUGUI
       value: 
       objectReference: {fileID: 884452854}
+    - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
+      propertyPath: textMeshProUGUILife
+      value: 
+      objectReference: {fileID: 884452854}
+    - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
+      propertyPath: textMeshProUGUIScore
+      value: 
+      objectReference: {fileID: 612879507}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: additionalObjectsCount
       value: 8

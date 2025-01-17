@@ -165,5 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2369e0cc0a2a59e40b953f84ccd048b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textMeshProUGUI: {fileID: 0}
-  TotalScore: 0
+  OnScoreChanged:
+    m_PersistentCalls:
+      m_Calls: []
