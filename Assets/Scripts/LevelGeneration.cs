@@ -27,9 +27,10 @@ public class LevelGeneration : MonoBehaviour
     public LineRenderer lineRenderer;
     bool bCanShoot = true;
 
+    // Section: Autres paramètres
+    [Header("Statistics")]
     public int lifesMainBall = 5;
     int ballsCount;
-
 
     // Section: Spawn Points
     [Header("Points de Spawn")]
@@ -41,10 +42,8 @@ public class LevelGeneration : MonoBehaviour
     public Rigidbody2D rb;
     public int clickForce = 500;
 
-
     // Liste globale des positions utilisées
     private HashSet<Vector3> usedPositions = new HashSet<Vector3>();
-
 
     // Section: Container d'objets
     [Header("Container d'objets")]
@@ -121,7 +120,7 @@ public class LevelGeneration : MonoBehaviour
 
         ballsCount = lifesMainBall;
 
-        textMeshProUGUI.text = "Balls remaining : "+ ballsCount.ToString();
+        textMeshProUGUI.text = "Balls remaining : " + ballsCount.ToString();
 
     }
 
@@ -129,6 +128,7 @@ public class LevelGeneration : MonoBehaviour
     void Update()
     {
         Aim();
+
     }
 
 
@@ -278,12 +278,12 @@ public class LevelGeneration : MonoBehaviour
 
         // Réinitialiser le flag pour permettre de tirer à nouveau
         bCanShoot = true;
-      
+
 
         if (ballsCount <= 0)
         {
 
-            Debug.Log("PERDUE");
+            Debug.Log("PERDU");
             //victoryScript.puggleAgent.AddReward(-40.0f);
             //victoryScript.puggleAgent.EndEpisode();
 
@@ -326,7 +326,7 @@ public class LevelGeneration : MonoBehaviour
             {
                 float randomX = Random.Range(minX, maxX);
                 float randomY = Random.Range(minY, maxY);
-                spawnPosition = new Vector3(randomX, randomY, 0)+transform.position;
+                spawnPosition = new Vector3(randomX, randomY, 0) + transform.position;
 
                 bool positionValid = true;
                 foreach (Vector3 usedPosition in usedPositions)
@@ -369,6 +369,8 @@ public class LevelGeneration : MonoBehaviour
         }
     }
 
+
+
     void GenerateSpawnPoints()
     {
         // Obtenir les dimensions de l'écran
@@ -396,7 +398,7 @@ public class LevelGeneration : MonoBehaviour
 
             // Créer un nouveau GameObject pour représenter le point de spawn
             GameObject spawnPoint = new GameObject($"SpawnPoint_{i + 1}");
-            spawnPoint.transform.position = new Vector3(xPosition, yPosition, -0.01f)+transform.position;
+            spawnPoint.transform.position = new Vector3(xPosition, yPosition, -0.01f) + transform.position;
 
             // Ajouter un visuel pour représenter le point de spawn
             GameObject visual = CreateSpawnPointVisual(spawnPoint.transform);
