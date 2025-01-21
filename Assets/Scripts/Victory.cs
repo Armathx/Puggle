@@ -10,12 +10,11 @@ public class Victory : MonoBehaviour
 
     [Header("Main Ball Settings")]
     public GameObject mainBall;
-    public Rigidbody2D mainBallrb;
 
     [Header("Camera Settings")]
     public Camera mainCamera;
-    public float cameraZoomFactor = 3f;
-    public float cameraZoomSpeed = 1f;
+    public float cameraZoomFactor = 2f;
+    public float cameraZoomSpeed = 1.5f;
 
     [Header("Gameplay Settings")]
     public float slowMotionFactor = 0.2f;
@@ -43,16 +42,13 @@ public class Victory : MonoBehaviour
         }
     }
 
-   
+
 
     void Update()
     {
-        CheckVictoryCondition();  
-    }
 
-    private void FixedUpdate()
-    {
-     
+        CheckVictoryCondition();
+
     }
 
     public void UpdateMainBall(GameObject newMainBall)
@@ -71,6 +67,7 @@ public class Victory : MonoBehaviour
         }
         else if (objectsWithTag.Length == 0)
         {
+            victoryAchieved = true;
             TriggerVictory();
 
         }
@@ -86,8 +83,8 @@ public class Victory : MonoBehaviour
 
         if (distance < maxDistance)
         {
-            mainBallrb.linearVelocity /= 20.0f;
-        ZoomCamera(cameraZoomFactor, mainBall.transform.position);
+            Time.timeScale = slowMotionFactor;
+            ZoomCamera(cameraZoomFactor, mainBall.transform.position);
         }
         else
         {
@@ -109,12 +106,13 @@ public class Victory : MonoBehaviour
             Instantiate(explosionEffect, mainBall.transform.position, Quaternion.identity);
         }
 
-        ResetTimeAndCamera();
+
 
         //puggleAgent?.AddReward(400f);
         //puggleAgent?.EndEpisode();
 
-        levelGeneration?.Init();
+        levelGeneration.Init();
+
     }
 
     private void ResetTimeAndCamera()
@@ -139,6 +137,8 @@ public class Victory : MonoBehaviour
             );
         }
     }
+
+   
 
 
 }
