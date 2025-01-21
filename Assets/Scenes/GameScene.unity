@@ -579,9 +579,25 @@ PrefabInstance:
       value: -4.6
       objectReference: {fileID: 0}
     - target: {fileID: 4766135085065590510, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
+      propertyPath: mainBallrb
+      value: 
+      objectReference: {fileID: 5122650456381606371, guid: 21035d0f8cdcf4a46b2d3d0d6ede2fc6, type: 3}
+    - target: {fileID: 4766135085065590510, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 4766135085065590510, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
+      propertyPath: maxDistance
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4766135085065590510, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
+      propertyPath: victoryScreen
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4766135085065590510, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
+      propertyPath: slowMotionFactor
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 4770583360401203230, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.4935684
@@ -632,7 +648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: lifesMainBall
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: textMeshProUGUI
@@ -648,7 +664,7 @@ PrefabInstance:
       objectReference: {fileID: 612879507}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: additionalObjectsCount
-      value: 8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9025109821402481363, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: m_Name

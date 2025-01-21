@@ -1,54 +1,58 @@
-using NUnit.Framework;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class Victory : MonoBehaviour
 {
-    public string tagToCheck = "Green"; // Tag des objets verts
-    public GameObject victoryScreen;   // Écran ou message de victoire
-    public float slowMotionFactor = 0.2f; // Facteur de ralentissement
-    public GameObject mainBall;  // Référence à la balle principale
-    public Camera mainCamera;  // Référence à la caméra
-    public float maxDistance = 5f;  // Distance maximale entre la dernière boule verte et la balle principale
-    public float cameraZoomFactor = 3f;  // Valeur de la taille orthographique lors du zoom (plus petit = plus zoomé)
-    public float cameraZoomSpeed = 1f;  // Vitesse du zoom de la caméra
+    [Header("Victory Settings")]
+    public string tagToCheck = "Green";
+    public GameObject victoryScreen;
+    public GameObject explosionEffect;
 
-    private float originalSize;  // Taille orthographique initiale de la caméra
+    [Header("Main Ball Settings")]
+    public GameObject mainBall;
+    public Rigidbody2D mainBallrb;
 
-    public GameObject explosionEffect;  // Référence au système de particules d'explosion
+    [Header("Camera Settings")]
+    public Camera mainCamera;
+    public float cameraZoomFactor = 3f;
+    public float cameraZoomSpeed = 1f;
 
+    [Header("Gameplay Settings")]
+    public float slowMotionFactor = 0.2f;
+    public float maxDistance = 5f;
+
+    [Header("References")]
     public LevelGeneration levelGeneration;
-
     public PuggleAgent puggleAgent;
 
+    private float originalCameraSize;
+    private Vector3 cameraOriginalPosition;
+    private bool victoryAchieved = false;
 
-    bool bYouWin = false;
     void Start()
     {
-        // Assurez-vous que le victoryScreen est désactivé au départ
         if (victoryScreen != null)
         {
             victoryScreen.SetActive(false);
         }
 
-        // Sauvegarde de la taille orthographique initiale de la caméra
         if (mainCamera != null)
         {
-            originalSize = mainCamera.orthographicSize;
-            Debug.Log("Original Camera Size: " + originalSize);  // Vérification de la taille initiale
+            originalCameraSize = mainCamera.orthographicSize;
+            cameraOriginalPosition = mainCamera.transform.position;
         }
     }
 
+   
+
     void Update()
     {
-        if (!bYouWin)
-        {
-            CheckVictoryCondition();
-        }
+        CheckVictoryCondition();  
+    }
 
-
+    private void FixedUpdate()
+    {
+     
     }
 
     public void UpdateMainBall(GameObject newMainBall)
@@ -56,95 +60,85 @@ public class Victory : MonoBehaviour
         mainBall = newMainBall;
     }
 
-    void CheckVictoryCondition()
+    private void CheckVictoryCondition()
     {
-        // Trouver tous les objets avec le tag spécifié(Version LINQ
-        GameObject[] objectsWithTag = levelGeneration.marbles.Where(x => x != null).Where(x =>x.CompareTag(tagToCheck)).ToArray();
+        var objectsWithTag = levelGeneration.marbles.Where(x => x != null && x.CompareTag(tagToCheck)).ToArray();
 
-
-        // Si un seul objet reste et que la distance à la balle principale est inférieure à la valeur donnée
         if (objectsWithTag.Length == 1)
         {
-            // Trouver la dernière boule verte
-            GameObject lastGreenBall = objectsWithTag[0]; // Hypothèse que c'est le dernier objet dans le tableau
+            HandleSingleRemainingObject(objectsWithTag[0]);
 
-            // Calculer la distance entre la balle principale et la dernière boule verte
-            float distance = Vector3.Distance(mainBall.transform.position, lastGreenBall.transform.position);
-
-            // Si la distance est inférieure à la distance maximale
-            if (distance < maxDistance)
-            {
-                //    Time.timeScale = slowMotionFactor; // Appliquer le ralentissement
-
-
-                // Zoomer la caméra (réduire la taille orthographique)
-                if (mainCamera != null)
-                {
-                    // Log pour vérifier si le zoom est bien appliqué
-                    Debug.Log("Zooming In... Current Size: " + mainCamera.orthographicSize);
-
-                    // Interpolation de la taille orthographique pour effectuer un zoom progressif
-                    //mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, cameraZoomFactor, cameraZoomSpeed * Time.unscaledDeltaTime);
-                    //mainCamera.transform.position = mainBall.transform.position;
-                }
-            }
-            else
-            {
-             /*   Time.timeScale = 1.25f;*/ // Réinitialiser la vitesse normale
-
-                // Dé-zoomer la caméra (retour à la taille orthographique originale)
-                if (mainCamera != null)
-                {
-                    // Log pour vérifier si le dézoom est bien appliqué
-                    Debug.Log("Zooming Out... Current Size: " + mainCamera.orthographicSize);
-
-                    // Interpolation de la taille orthographique pour effectuer un dézoom progressif
-                    mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, originalSize, cameraZoomSpeed * Time.unscaledDeltaTime);
-
-                }
-            }
         }
         else if (objectsWithTag.Length == 0)
         {
-            OnVictory();
+            TriggerVictory();
+
         }
         else
         {
-            /* Time.timeScale = 1.25f; */// Réinitialiser la vitesse normale si plus d'un objet reste
+            ResetTimeAndCamera();
         }
     }
 
-    void OnVictory()
+    private void HandleSingleRemainingObject(GameObject lastGreenBall)
     {
-        Debug.Log("Victoire !");
-        bYouWin = true;
-        // Activer l'écran de victoire s'il existe
+        float distance = Vector3.Distance(mainBall.transform.position, lastGreenBall.transform.position);
+
+        if (distance < maxDistance)
+        {
+            mainBallrb.linearVelocity /= 20.0f;
+        ZoomCamera(cameraZoomFactor, mainBall.transform.position);
+        }
+        else
+        {
+            ResetTimeAndCamera();
+        }
+    }
+
+    private void TriggerVictory()
+    {
+        victoryAchieved = true;
+
         if (victoryScreen != null)
         {
             victoryScreen.SetActive(true);
         }
 
-        puggleAgent.AddReward(400.0f);
+        if (explosionEffect != null)
+        {
+            Instantiate(explosionEffect, mainBall.transform.position, Quaternion.identity);
+        }
 
-        puggleAgent.EndEpisode();
+        ResetTimeAndCamera();
 
-        levelGeneration.Init();
+        //puggleAgent?.AddReward(400f);
+        //puggleAgent?.EndEpisode();
 
-
-
-
-        //// Lancer l'explosion (si elle existe)
-        //if (explosionEffect != null)
-        //{
-        //    Instantiate(explosionEffect, mainBall.transform.position, Quaternion.identity);
-
-        //    Destroy(explosionEffect);
-        //}
-
-        // Vous pouvez arrêter le jeu ou exécuter d'autres actions ici
-        //Time.timeScale = 1.0f; // Diminuer le timescale après la victoire
-
-        //mainCamera.orthographicSize = Mathf.Lerp(originalSize, mainCamera.orthographicSize, cameraZoomSpeed * Time.unscaledDeltaTime);
+        levelGeneration?.Init();
     }
+
+    private void ResetTimeAndCamera()
+    {
+        Time.timeScale = 1f;
+        ZoomCamera(originalCameraSize, cameraOriginalPosition);
+    }
+
+    private void ZoomCamera(float targetSize, Vector3 targetPosition)
+    {
+        if (mainCamera != null)
+        {
+            mainCamera.transform.position = new Vector3(
+                targetPosition.x,
+                targetPosition.y,
+                mainCamera.transform.position.z
+            );
+            mainCamera.orthographicSize = Mathf.Lerp(
+                mainCamera.orthographicSize,
+                targetSize,
+                cameraZoomSpeed * Time.unscaledDeltaTime
+            );
+        }
+    }
+
 
 }
