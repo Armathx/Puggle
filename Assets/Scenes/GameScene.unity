@@ -647,6 +647,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
+      propertyPath: maxObjects
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: lifesMainBall
       value: 8
       objectReference: {fileID: 0}
@@ -659,12 +663,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 884452854}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
+      propertyPath: killableObjectsCount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: textMeshProUGUIScore
       value: 
       objectReference: {fileID: 612879507}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: additionalObjectsCount
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 9025109821402481363, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: m_Name

@@ -84,7 +84,7 @@ public class Victory : MonoBehaviour
         if (distance < maxDistance)
         {
             Time.timeScale = slowMotionFactor;
-            ZoomCamera(cameraZoomFactor, mainBall.transform.position);
+            //ZoomCamera(cameraZoomFactor, mainBall.transform.position);
         }
         else
         {

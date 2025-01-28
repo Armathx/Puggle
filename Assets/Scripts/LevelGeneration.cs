@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using System.Diagnostics.Contracts;
 using TMPro;
 using System.Linq.Expressions;
+using System.Linq;
 
 public class LevelGeneration : MonoBehaviour
 {
@@ -139,8 +140,9 @@ public class LevelGeneration : MonoBehaviour
         GetScore.totalScore = 0;
 
         // Générer les objets
-        SpawnObjects(objectToSpawn, Random.Range(minObjects, maxObjects));
         SpawnObjects(additionalObjectToSpawn, additionalObjectsCount);
+        SpawnObjects(objectToSpawn, Random.Range(minObjects, maxObjects));
+
         SpawnObjects(killableObjectToSpawn, killableObjectsCount);
 
         ballsCount = lifesMainBall;
@@ -352,6 +354,8 @@ public class LevelGeneration : MonoBehaviour
 
     void GenerateSpawnPoints()
     {
+
+
         // Obtenir les dimensions de l'écran
         Camera mainCamera = Camera.main;
         if (mainCamera == null)
@@ -502,10 +506,12 @@ public class LevelGeneration : MonoBehaviour
                     spawnedObject.transform.SetParent(killableObjectContainer);
             }
         }
+        Debug.Log("BilleCount : " + count);
     }
 
+    
     #endregion
 
-
+  
 
 }
