@@ -8,28 +8,28 @@ using System.Linq;
 
 public class LevelGeneration : MonoBehaviour
 {
-    // Section: GameObjects à instancier
-    [Header("GameObjects à instancier")]
-    public GameObject MainBall;                   // Le premier prefab à instancier
-    public GameObject objectToSpawn;              // Le premier prefab à instancier
-    public GameObject additionalObjectToSpawn;   // Le second prefab à instancier
-    public GameObject killableObjectToSpawn;     // Le troisième prefab à instancier
+    // Section: GameObjects ï¿½ instancier
+    [Header("GameObjects ï¿½ instancier")]
+    public GameObject MainBall;                   // Le premier prefab ï¿½ instancier
+    public GameObject objectToSpawn;              // Le premier prefab ï¿½ instancier
+    public GameObject additionalObjectToSpawn;   // Le second prefab ï¿½ instancier
+    public GameObject killableObjectToSpawn;     // Le troisiï¿½me prefab ï¿½ instancier
 
-    // Section: Paramètres de génération
-    [Header("Paramètres de génération")]
-    public int minObjects = 5;                   // Nombre minimum d'objets à générer
-    public int maxObjects = 20;                  // Nombre maximum d'objets à générer
-    public int additionalObjectsCount = 15;      // Nombre d'objets supplémentaires à générer
-    public int killableObjectsCount = 5;         // Nombre d'objets "éliminables" à générer
-    public float sphereDiameter = 0.8f;          // Diamètre des sphères
+    // Section: Paramï¿½tres de gï¿½nï¿½ration
+    [Header("Paramï¿½tres de gï¿½nï¿½ration")]
+    public int minObjects = 5;                   // Nombre minimum d'objets ï¿½ gï¿½nï¿½rer
+    public int maxObjects = 20;                  // Nombre maximum d'objets ï¿½ gï¿½nï¿½rer
+    public int additionalObjectsCount = 15;      // Nombre d'objets supplï¿½mentaires ï¿½ gï¿½nï¿½rer
+    public int killableObjectsCount = 5;         // Nombre d'objets "ï¿½liminables" ï¿½ gï¿½nï¿½rer
+    public float sphereDiameter = 0.8f;          // Diamï¿½tre des sphï¿½res
 
-    // Section: Autres paramètres
-    [Header("Paramètres supplémentaires")]
+    // Section: Autres paramï¿½tres
+    [Header("Paramï¿½tres supplï¿½mentaires")]
     public bool Once = true;
     public LineRenderer lineRenderer;
     bool bCanShoot = true;
 
-    // Section: Autres paramètres
+    // Section: Autres paramï¿½tres
     [Header("Statistics")]
     public int lifesMainBall = 5;
     int ballsCount;
@@ -47,7 +47,7 @@ public class LevelGeneration : MonoBehaviour
     public Rigidbody2D rb;
     public int clickForce = 500;
 
-    // Liste globale des positions utilisées
+    // Liste globale des positions utilisï¿½es
     private HashSet<Vector3> usedPositions = new HashSet<Vector3>();
 
     // Section: Container d'objets
@@ -63,26 +63,26 @@ public class LevelGeneration : MonoBehaviour
 
     public int shootCount = 0;
 
-    public Victory victoryScript; // Référence au script Victory
+    public Victory victoryScript; // Rï¿½fï¿½rence au script Victory
 
     public List<GameObject> marbles;
 
     private void OnEnable()
     {
-        // S'abonner à l'événement
+        // S'abonner ï¿½ l'ï¿½vï¿½nement
         GetScore.OnScoreChanged += UpdateScoreDisplay;
     }
 
     private void OnDisable()
     {
-        // Se désabonner de l'événement pour éviter les erreurs
+        // Se dï¿½sabonner de l'ï¿½vï¿½nement pour ï¿½viter les erreurs
         GetScore.OnScoreChanged -= UpdateScoreDisplay;
     }
 
 
     void CreateHierarchyContainers()
     {
-        // Créer des conteneurs pour organiser les objets
+        // Crï¿½er des conteneurs pour organiser les objets
         mainBallContainer = new GameObject("MainBall").transform;
         objectContainer = new GameObject("BlueDots").transform;
         additionalObjectContainer = new GameObject("GreenDots").transform;
@@ -96,12 +96,12 @@ public class LevelGeneration : MonoBehaviour
 
         victoryScript.levelGeneration = this;
 
-        // Créer des conteneurs pour organiser les objets
+        // Crï¿½er des conteneurs pour organiser les objets
         CreateHierarchyContainers();
 
-        // Générer dynamiquement les points de spawn
+        // Gï¿½nï¿½rer dynamiquement les points de spawn
         GenerateSpawnPoints();
-        //// Mettre à jour l'affichage du score au démarrage
+        //// Mettre ï¿½ jour l'affichage du score au dï¿½marrage
         UpdateScoreDisplay(TotalScore);
 
         Init();
@@ -134,12 +134,12 @@ public class LevelGeneration : MonoBehaviour
             Destroy(t.gameObject);
         }
 
-        // Générer la MainBall et assigner son Rigidbody2D à 'rb'
+        // Gï¿½nï¿½rer la MainBall et assigner son Rigidbody2D ï¿½ 'rb'
         SpawnMainBall();
 
         GetScore.totalScore = 0;
 
-        // Générer les objets
+        // Gï¿½nï¿½rer les objets
         SpawnObjects(additionalObjectToSpawn, additionalObjectsCount);
         SpawnObjects(objectToSpawn, Random.Range(minObjects, maxObjects));
 
@@ -169,7 +169,7 @@ public class LevelGeneration : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("TextMeshProUGUI non assigné !");
+            Debug.LogWarning("TextMeshProUGUI non assignï¿½ !");
         }
 
 
@@ -201,16 +201,16 @@ public class LevelGeneration : MonoBehaviour
         {
 
             // Gestion des touches pour changer de point de spawn
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.A) || (Input.GetMouseButtonDown(0)))
             {
-                // Passer au point de spawn précédent
+                // Passer au point de spawn prï¿½cï¿½dent
                 currentSpawnIndex = (currentSpawnIndex - 1 + spawnPoints.Length) % spawnPoints.Length;
                 Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
 
                 RespawnMainBallAtCurrentPoint();
             }
 
-            if (Input.GetKeyDown(KeyCode.D))
+            if (Input.GetKeyDown(KeyCode.D) || (Input.GetMouseButtonDown(1)))
             {
                 // Passer au point de spawn suivant
                 currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
@@ -219,21 +219,21 @@ public class LevelGeneration : MonoBehaviour
                 RespawnMainBallAtCurrentPoint();
             }
 
-            // Récupérer la position de la souris en coordonnées mondiales
+            // Rï¿½cupï¿½rer la position de la souris en coordonnï¿½es mondiales
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePos.z = 0f; // Assurer une position Z correcte pour un jeu 2D
 
             // Calculer la direction vers la souris
             Vector3 mouseDir = (mousePos - rb.transform.position).normalized;
 
-            // Mettre à jour le LineRenderer
+            // Mettre ï¿½ jour le LineRenderer
             lineRenderer.SetPosition(0, mousePos);
             lineRenderer.SetPosition(1, rb.transform.position);
 
 
             // Appliquer une force lors du clic gauche / Espace
 
-            if (Input.GetMouseButtonDown(0) || (Input.GetKeyDown(KeyCode.Space)))
+            if(((Input.GetKeyDown(KeyCode.Space)) || (Input.GetMouseButtonDown(2))))
             {
                 Shoot(mouseDir);
             }
@@ -245,10 +245,10 @@ public class LevelGeneration : MonoBehaviour
 
     void SpawnMainBall()
     {
-        // Vérifier si le tableau spawnPoints contient des éléments
+        // Vï¿½rifier si le tableau spawnPoints contient des ï¿½lï¿½ments
         if (spawnPoints.Length > 0)
         {
-            // Sélectionner un transform aléatoire dans le tableau spawnPoints
+            // Sï¿½lectionner un transform alï¿½atoire dans le tableau spawnPoints
             Transform randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
             // Instancier la MainBall au point de spawn actif
@@ -258,23 +258,23 @@ public class LevelGeneration : MonoBehaviour
             // Ajouter la MainBall dans le conteneur
             spawnedBall.transform.SetParent(mainBallContainer);
 
-            // Récupérer le Rigidbody2D de la MainBall instanciée
+            // Rï¿½cupï¿½rer le Rigidbody2D de la MainBall instanciï¿½e
             rb = spawnedBall.GetComponent<Rigidbody2D>();
 
             if (rb == null)
             {
-                Debug.LogError("Le prefab MainBall ne possède pas de Rigidbody2D !");
+                Debug.LogError("Le prefab MainBall ne possï¿½de pas de Rigidbody2D !");
             }
             else
             {
-                // Définir le Rigidbody2D comme Static
+                // Dï¿½finir le Rigidbody2D comme Static
                 rb.bodyType = RigidbodyType2D.Static;
 
-                // Définir la détection des collisions sur Continuous
+                // Dï¿½finir la dï¿½tection des collisions sur Continuous
                 rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
             }
 
-            // Mettre à jour la mainBall dans le script Victory
+            // Mettre ï¿½ jour la mainBall dans le script Victory
             if (victoryScript != null)
             {
                 victoryScript.UpdateMainBall(spawnedBall); // Assigner la nouvelle MainBall
@@ -307,12 +307,12 @@ public class LevelGeneration : MonoBehaviour
         // Ajouter la MainBall dans le conteneur
         spawnedBall.transform.SetParent(mainBallContainer);
 
-        // Récupérer et configurer le Rigidbody2D de la balle instanciée
+        // Rï¿½cupï¿½rer et configurer le Rigidbody2D de la balle instanciï¿½e
         rb = spawnedBall.GetComponent<Rigidbody2D>();
 
         if (rb == null)
         {
-            Debug.LogError("Le prefab MainBall ne possède pas de Rigidbody2D !");
+            Debug.LogError("Le prefab MainBall ne possï¿½de pas de Rigidbody2D !");
         }
         else
         {
@@ -320,13 +320,13 @@ public class LevelGeneration : MonoBehaviour
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         }
 
-        // Mettre à jour la mainBall dans le script Victory
+        // Mettre ï¿½ jour la mainBall dans le script Victory
         if (victoryScript != null)
         {
             victoryScript.UpdateMainBall(spawnedBall); // Assigner la nouvelle MainBall
         }
 
-        // Réinitialiser le flag pour permettre de tirer à nouveau
+        // Rï¿½initialiser le flag pour permettre de tirer ï¿½ nouveau
         bCanShoot = true;
 
 
@@ -356,11 +356,11 @@ public class LevelGeneration : MonoBehaviour
     {
 
 
-        // Obtenir les dimensions de l'écran
+        // Obtenir les dimensions de l'ï¿½cran
         Camera mainCamera = Camera.main;
         if (mainCamera == null)
         {
-            Debug.LogError("Aucune caméra principale trouvée !");
+            Debug.LogError("Aucune camï¿½ra principale trouvï¿½e !");
             return;
         }
 
@@ -372,35 +372,35 @@ public class LevelGeneration : MonoBehaviour
         // Calcul de l'espacement entre les points
         float spacing = screenWidth / 6f; // Diviser par 6 pour laisser de l'espace sur les bords
 
-        // Générer les points de spawn
+        // Gï¿½nï¿½rer les points de spawn
         List<Transform> points = new List<Transform>();
         for (int i = 0; i < 5; i++)
         {
             // Calculer la position du point
             float xPosition = -screenWidth / 2f + spacing * (i + 1);
 
-            // Créer un nouveau GameObject pour représenter le point de spawn
+            // Crï¿½er un nouveau GameObject pour reprï¿½senter le point de spawn
             GameObject spawnPoint = new GameObject($"SpawnPoint_{i + 1}");
             spawnPoint.transform.position = new Vector3(xPosition, yPosition, -0.01f) + transform.position;
 
-            // Ajouter un visuel pour représenter le point de spawn
+            // Ajouter un visuel pour reprï¿½senter le point de spawn
             GameObject visual = CreateSpawnPointVisual(spawnPoint.transform);
             visual.transform.SetParent(spawnPoint.transform); // Faire du cercle un enfant du point
 
             // Ajouter le point comme enfant du conteneur
             spawnPoint.transform.SetParent(spawnPointContainer.transform);
 
-            // Ajouter le Transform à la liste
+            // Ajouter le Transform ï¿½ la liste
             points.Add(spawnPoint.transform);
         }
 
-        // Assigner les points générés au tableau spawnPoints
+        // Assigner les points gï¿½nï¿½rï¿½s au tableau spawnPoints
         spawnPoints = points.ToArray();
     }
-    // Crée un cercle visuel pour représenter un point de spawn
+    // Crï¿½e un cercle visuel pour reprï¿½senter un point de spawn
     GameObject CreateSpawnPointVisual(Transform parent)
     {
-        // Créer un GameObject pour le visuel
+        // Crï¿½er un GameObject pour le visuel
         GameObject circle = new GameObject("Visual");
 
         // Ajouter un composant SpriteRenderer pour afficher un cercle
@@ -408,7 +408,7 @@ public class LevelGeneration : MonoBehaviour
         renderer.sprite = GenerateCircleSprite();
         renderer.color = Color.red; // Couleur du cercle
 
-        // Réduire la taille pour qu'il soit petit
+        // Rï¿½duire la taille pour qu'il soit petit
         circle.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
 
         // Positionner au centre du point de spawn
@@ -416,7 +416,7 @@ public class LevelGeneration : MonoBehaviour
 
         return circle;
     }
-    // Génère un Sprite circulaire à utiliser pour les visuels
+    // Gï¿½nï¿½re un Sprite circulaire ï¿½ utiliser pour les visuels
     Sprite GenerateCircleSprite()
     {
         Texture2D texture = new Texture2D(128, 128);
@@ -431,7 +431,7 @@ public class LevelGeneration : MonoBehaviour
         }
         texture.Apply();
 
-        // Créer le sprite à partir de la texture
+        // Crï¿½er le sprite ï¿½ partir de la texture
         return Sprite.Create(texture, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
     }
 
@@ -439,11 +439,11 @@ public class LevelGeneration : MonoBehaviour
 
     void SpawnObjects(GameObject prefab, int count)//Spawn All Objects hitable
     {
-        // Obtenir les limites de l'écran
+        // Obtenir les limites de l'ï¿½cran
         Camera mainCamera = Camera.main;
         if (mainCamera == null)
         {
-            Debug.LogError("Aucune caméra principale trouvée !");
+            Debug.LogError("Aucune camï¿½ra principale trouvï¿½e !");
             return;
         }
 
@@ -486,18 +486,18 @@ public class LevelGeneration : MonoBehaviour
                 attempts++;
                 if (attempts > 100)
                 {
-                    Debug.LogWarning("Impossible de trouver une position valide après 100 tentatives.");
+                    Debug.LogWarning("Impossible de trouver une position valide aprï¿½s 100 tentatives.");
                     break;
                 }
             } while (true);
 
-            // Instancier l'objet si une position valide a été trouvée
+            // Instancier l'objet si une position valide a ï¿½tï¿½ trouvï¿½e
             if (attempts <= 100)
             {
                 GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
                 marbles.Add(spawnedObject);
 
-                // Ajouter l'objet dans le conteneur approprié
+                // Ajouter l'objet dans le conteneur appropriï¿½
                 if (prefab == objectToSpawn)
                     spawnedObject.transform.SetParent(objectContainer);
                 else if (prefab == additionalObjectToSpawn)
