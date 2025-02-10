@@ -79,7 +79,6 @@ public class LevelGeneration : MonoBehaviour
         GetScore.OnScoreChanged -= UpdateScoreDisplay;
     }
 
-
     void CreateHierarchyContainers()
     {
         // Cr�er des conteneurs pour organiser les objets
@@ -107,10 +106,6 @@ public class LevelGeneration : MonoBehaviour
         Init();
 
     }
-
-
-
-
     public void Init()
     {
         shootCount = 0;
@@ -150,7 +145,6 @@ public class LevelGeneration : MonoBehaviour
         textMeshProUGUILife.text = "Balls remaining : " + ballsCount.ToString();
 
     }
-
 
     void Update()
     {
@@ -205,7 +199,7 @@ public class LevelGeneration : MonoBehaviour
             {
                 // Passer au point de spawn pr�c�dent
                 currentSpawnIndex = (currentSpawnIndex - 1 + spawnPoints.Length) % spawnPoints.Length;
-                Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
+                //Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
 
                 RespawnMainBallAtCurrentPoint();
             }
@@ -214,7 +208,7 @@ public class LevelGeneration : MonoBehaviour
             {
                 // Passer au point de spawn suivant
                 currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
-                Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
+                //Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
 
                 RespawnMainBallAtCurrentPoint();
             }
