@@ -14,7 +14,7 @@ public class GetScore : MonoBehaviour
 
         if (other.CompareTag("Blue"))
         {
-            Debug.Log("BLUE");
+            //Debug.Log("BLUE");
 
             totalScore += 1000; // Ajoute des points
         }
@@ -25,6 +25,8 @@ public class GetScore : MonoBehaviour
         else if (other.CompareTag("Orange"))
         {
             totalScore -= 525; // Retire des points
+
+
         }
 
         // Déclenche l'événement via le délégué
