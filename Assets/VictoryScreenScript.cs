@@ -12,16 +12,17 @@ public class VictoryScreenScript : MonoBehaviour
 
     //facteur de mise a lechelle
     private Vector3 targetScale = new Vector3(20f, 20f, 20f);
-    private Vector3 finalScale = new Vector3(10f, 10f, 10f);
+    private Vector3 finalScale = new Vector3(6.66f, 6.66f, 6.66f);
+
+    //rotationSpeed
+    private float rotationSpeed = 150f;
 
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
         StartCoroutine(AnimateTriangle());
-
 
     }
 
@@ -38,6 +39,8 @@ public class VictoryScreenScript : MonoBehaviour
         {
 
             triangle.transform.localScale = Vector3.Lerp(Vector3.zero, targetScale, elapsedTime /scaleUpTIme);
+            // Appliquer la rotation chaque frame autour de l'axe Y
+            transform.Rotate(0,0, rotationSpeed * Time.deltaTime);
             elapsedTime += Time.deltaTime;
 
             yield return null;
@@ -54,6 +57,8 @@ public class VictoryScreenScript : MonoBehaviour
             elapsedTime += Time.deltaTime;
 
             yield return null;
+            transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
+
 
 
         }
