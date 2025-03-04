@@ -7,7 +7,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        levelSelectionPanel.SetActive(false); // Cache le menu des niveaux au départ
+        levelSelectionPanel.SetActive(true); // Cache le menu des niveaux au départ
     }
 
     public void OpenLevelSelection()

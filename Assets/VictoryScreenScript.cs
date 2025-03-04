@@ -12,7 +12,7 @@ public class VictoryScreenScript : MonoBehaviour
 
     //facteur de mise a lechelle
     private Vector3 targetScale = new Vector3(20f, 20f, 20f);
-    private Vector3 finalScale = new Vector3(6.66f, 6.66f, 6.66f);
+    private Vector3 finalScale = new Vector3(0.01f, 0.01f, 0.01f);
 
     //rotationSpeed
     private float rotationSpeed = 150f;
