@@ -151,7 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b45bce658717929459bf29b4a5425a47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelSelectionPanel: {fileID: 295030108}
 --- !u!114 &295030110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1078,6 +1077,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1421981995704668590, guid: f2e295acd0ecb8740ac18d42aeeb9db9, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1421981995704668590, guid: f2e295acd0ecb8740ac18d42aeeb9db9, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 3958247142039299981, guid: f2e295acd0ecb8740ac18d42aeeb9db9, type: 3}
       propertyPath: m_Pivot.x
       value: 0
