@@ -1,4 +1,4 @@
- using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Diagnostics.Contracts;
@@ -11,6 +11,7 @@ public class LevelGeneration : MonoBehaviour
     // Section: GameObjects � instancier
     [Header("GameObjects � instancier")]
     public GameObject MainBall;                   // Le premier prefab � instancier
+
     public GameObject objectToSpawn;              // Le premier prefab � instancier
     public GameObject additionalObjectToSpawn;   // Le second prefab � instancier
     public GameObject killableObjectToSpawn;     // Le troisi�me prefab � instancier
@@ -18,6 +19,7 @@ public class LevelGeneration : MonoBehaviour
     // Section: Param�tres de g�n�ration
     [Header("Param�tres de g�n�ration")]
     public int minObjects = 5;                   // Nombre minimum d'objets � g�n�rer
+
     public int maxObjects = 20;                  // Nombre maximum d'objets � g�n�rer
     public int additionalObjectsCount = 15;      // Nombre d'objets suppl�mentaires � g�n�rer
     public int killableObjectsCount = 5;         // Nombre d'objets "�liminables" � g�n�rer
@@ -26,25 +28,28 @@ public class LevelGeneration : MonoBehaviour
     // Section: Autres param�tres
     [Header("Param�tres suppl�mentaires")]
     public bool Once = true;
+
     public LineRenderer lineRenderer;
-    bool bCanShoot = true;
+    private bool bCanShoot = true;
 
     // Section: Autres param�tres
     [Header("Statistics")]
     public int lifesMainBall = 5;
-    int ballsCount;
-    int TotalScore;
-    int TempScore;
 
+    private int ballsCount;
+    private int TotalScore;
+    private int TempScore;
 
     // Section: Spawn Points
     [Header("Points de Spawn")]
     public Transform[] spawnPoints;
+
     private int currentSpawnIndex = 0; // Index du point de spawn actif
 
     // Section: Rigidbody et physique
     [Header("Rigidbody et physique")]
     public Rigidbody2D rb;
+
     public int clickForce = 500;
 
     // Liste globale des positions utilis�es
@@ -53,6 +58,7 @@ public class LevelGeneration : MonoBehaviour
     // Section: Container d'objets
     [Header("Container d'objets")]
     private Transform mainBallContainer;
+
     private Transform objectContainer;
     private Transform additionalObjectContainer;
     private Transform killableObjectContainer;
@@ -79,7 +85,7 @@ public class LevelGeneration : MonoBehaviour
         GetScore.OnScoreChanged -= UpdateScoreDisplay;
     }
 
-    void CreateHierarchyContainers()
+    private void CreateHierarchyContainers()
     {
         // Cr�er des conteneurs pour organiser les objets
         mainBallContainer = new GameObject("MainBall").transform;
@@ -89,10 +95,8 @@ public class LevelGeneration : MonoBehaviour
         spawnPointContainer = new GameObject("SpawnPoints").transform;
     }
 
-
     private void Start()
     {
-
         victoryScript.levelGeneration = this;
 
         // Cr�er des conteneurs pour organiser les objets
@@ -104,8 +108,8 @@ public class LevelGeneration : MonoBehaviour
         UpdateScoreDisplay(TotalScore);
 
         Init();
-
     }
+
     public void Init()
     {
         shootCount = 0;
@@ -143,13 +147,11 @@ public class LevelGeneration : MonoBehaviour
         ballsCount = lifesMainBall;
 
         textMeshProUGUILife.text = "Balls remaining : " + ballsCount.ToString();
-
     }
 
-    void Update()
+    private void Update()
     {
         Aim();
-      
     }
 
     #region ---------------ScoreDisplay---------------
@@ -159,17 +161,14 @@ public class LevelGeneration : MonoBehaviour
         if (textMeshProUGUIScore != null)
         {
             textMeshProUGUIScore.text = "Score: " + (newScore).ToString();
-
         }
         else
         {
             Debug.LogWarning("TextMeshProUGUI non assign� !");
         }
-
-
     }
 
-    #endregion
+    #endregion ---------------ScoreDisplay---------------
 
     #region ---------------MainBall---------------
 
@@ -187,13 +186,10 @@ public class LevelGeneration : MonoBehaviour
         textMeshProUGUILife.text = "Balls remaining : " + ballsCount.ToString();
     }
 
-
-    void Aim()
+    private void Aim()
     {
-
         if (bCanShoot)
         {
-
             // Gestion des touches pour changer de point de spawn
             if (Input.GetKeyDown(KeyCode.A) || (Input.GetMouseButtonDown(0)))
             {
@@ -224,20 +220,16 @@ public class LevelGeneration : MonoBehaviour
             lineRenderer.SetPosition(0, mousePos);
             lineRenderer.SetPosition(1, rb.transform.position);
 
-
             // Appliquer une force lors du clic gauche / Espace
 
-            if(((Input.GetKeyDown(KeyCode.Space)) || (Input.GetMouseButtonDown(2))))
+            if (((Input.GetKeyDown(KeyCode.Space)) || (Input.GetMouseButtonDown(2))))
             {
                 Shoot(mouseDir);
             }
-
         }
-
     }
 
-
-    void SpawnMainBall()
+    private void SpawnMainBall()
     {
         // V�rifier si le tableau spawnPoints contient des �l�ments
         if (spawnPoints.Length > 0)
@@ -282,7 +274,6 @@ public class LevelGeneration : MonoBehaviour
         bCanShoot = true;
 
         victoryScript.puggleAgent.RequestDecision();
-
     }
 
     public void RespawnMainBallAtCurrentPoint() //Respawn ball after Death
@@ -293,7 +284,6 @@ public class LevelGeneration : MonoBehaviour
             Destroy(rb.gameObject);
         }
 
-       
         // Instancier la MainBall au point de spawn actif
         Transform spawnPoint = spawnPoints[currentSpawnIndex];
         GameObject spawnedBall = Instantiate(MainBall, spawnPoint.position, Quaternion.identity);
@@ -323,10 +313,8 @@ public class LevelGeneration : MonoBehaviour
         // R�initialiser le flag pour permettre de tirer � nouveau
         bCanShoot = true;
 
-
         if (ballsCount <= 0)
         {
-
             Debug.Log("PERDU");
             //victoryScript.puggleAgent.AddReward(-40.0f);
             //victoryScript.puggleAgent.EndEpisode();
@@ -338,18 +326,14 @@ public class LevelGeneration : MonoBehaviour
             //victoryScript.puggleAgent.AddReward(-0.1f);
             //victoryScript.puggleAgent.RequestDecision();
         }
-
-
     }
 
-    #endregion
+    #endregion ---------------MainBall---------------
 
     #region ---------------Spawn---------------
 
-    void GenerateSpawnPoints()
+    private void GenerateSpawnPoints()
     {
-
-
         // Obtenir les dimensions de l'�cran
         Camera mainCamera = Camera.main;
         if (mainCamera == null)
@@ -391,8 +375,9 @@ public class LevelGeneration : MonoBehaviour
         // Assigner les points g�n�r�s au tableau spawnPoints
         spawnPoints = points.ToArray();
     }
+
     // Cr�e un cercle visuel pour repr�senter un point de spawn
-    GameObject CreateSpawnPointVisual(Transform parent)
+    private GameObject CreateSpawnPointVisual(Transform parent)
     {
         // Cr�er un GameObject pour le visuel
         GameObject circle = new GameObject("Visual");
@@ -410,8 +395,9 @@ public class LevelGeneration : MonoBehaviour
 
         return circle;
     }
+
     // G�n�re un Sprite circulaire � utiliser pour les visuels
-    Sprite GenerateCircleSprite()
+    private Sprite GenerateCircleSprite()
     {
         Texture2D texture = new Texture2D(128, 128);
         for (int y = 0; y < texture.height; y++)
@@ -429,9 +415,7 @@ public class LevelGeneration : MonoBehaviour
         return Sprite.Create(texture, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
     }
 
-
-
-    void SpawnObjects(GameObject prefab, int count)//Spawn All Objects hitable
+    private void SpawnObjects(GameObject prefab, int count)//Spawn All Objects hitable
     {
         // Obtenir les limites de l'�cran
         Camera mainCamera = Camera.main;
@@ -503,9 +487,5 @@ public class LevelGeneration : MonoBehaviour
         Debug.Log("BilleCount : " + count);
     }
 
-    
-    #endregion
-
-  
-
+    #endregion ---------------Spawn---------------
 }
