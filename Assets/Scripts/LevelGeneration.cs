@@ -72,6 +72,7 @@ public class LevelGeneration : MonoBehaviour
     public Victory victoryScript; // R�f�rence au script Victory
 
     public List<GameObject> marbles;
+    public Vector3 dir;
 
     private void OnEnable()
     {
@@ -172,7 +173,7 @@ public class LevelGeneration : MonoBehaviour
 
     #region ---------------MainBall---------------
 
-    public void Shoot(Vector3 dir)
+    public void Shoot()
     {
         Debug.Log("Shoot");
         rb.bodyType = RigidbodyType2D.Dynamic; // Passer le Rigidbody en mode dynamique
@@ -224,7 +225,9 @@ public class LevelGeneration : MonoBehaviour
 
             if (((Input.GetKeyDown(KeyCode.Space)) || (Input.GetMouseButtonDown(2))))
             {
-                Shoot(mouseDir);
+                dir = mouseDir;
+
+                Shoot();
             }
         }
     }

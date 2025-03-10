@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PuggleAgent : Agent
 {
-
     public LevelGeneration levelGeneration;
     public int maxObservationNb;
 
@@ -18,14 +17,14 @@ public class PuggleAgent : Agent
         Dir.x = Mathf.Clamp(actions.ContinuousActions[0], -1, 1);
         Dir.y = Mathf.Clamp(actions.ContinuousActions[1], -1, 0);
 
-        levelGeneration.Shoot(Dir);
+        levelGeneration.Shoot();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         base.CollectObservations(sensor);
 
-        if (levelGeneration.marbles.Count/3f > maxObservationNb)
+        if (levelGeneration.marbles.Count / 3f > maxObservationNb)
         {
             Debug.LogWarning("Trop de..");
             return;
@@ -49,19 +48,22 @@ public class PuggleAgent : Agent
                     case "Blue":
                         sensor.AddObservation(1);
                         break;
+
                     case "Orange":
                         sensor.AddObservation(2);
                         break;
+
                     case "Green":
                         sensor.AddObservation(3);
                         break;
+
                     default:
                         break;
                 }
             }
         }
 
-        for (int i = (levelGeneration.marbles.Count*3); i < maxObservationNb; i++)
+        for (int i = (levelGeneration.marbles.Count * 3); i < maxObservationNb; i++)
         {
             sensor.AddObservation(10000);
         }
@@ -77,18 +79,13 @@ public class PuggleAgent : Agent
         base.Heuristic(actionsOut);
     }
 
-
-
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
     }
 }

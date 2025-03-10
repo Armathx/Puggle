@@ -806,6 +806,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2e295acd0ecb8740ac18d42aeeb9db9, type: 3}
+--- !u!114 &663479304 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1421981995704668590, guid: f2e295acd0ecb8740ac18d42aeeb9db9, type: 3}
+  m_PrefabInstance: {fileID: 663479303}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &663479305 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1949031003102542502, guid: f2e295acd0ecb8740ac18d42aeeb9db9, type: 3}
+  m_PrefabInstance: {fileID: 663479303}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &743412416
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,19 +1186,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 917003475}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 636228218}
-        m_TargetAssemblyTypeName: QuitMenu, Assembly-CSharp
-        m_MethodName: QuitGame
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: GameMenu
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &917003475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1482,7 +1492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4770583360401203230, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.8656616
+      value: -1.82
       objectReference: {fileID: 0}
     - target: {fileID: 4770583360401203230, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1555,7 +1565,7 @@ PrefabInstance:
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: textMeshProUGUILife
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 663479305}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: killableObjectsCount
       value: 5
@@ -1563,7 +1573,7 @@ PrefabInstance:
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: textMeshProUGUIScore
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 663479304}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: additionalObjectsCount
       value: 3

@@ -1082,6 +1082,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2e295acd0ecb8740ac18d42aeeb9db9, type: 3}
+--- !u!114 &1576712828 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1421981995704668590, guid: f2e295acd0ecb8740ac18d42aeeb9db9, type: 3}
+  m_PrefabInstance: {fileID: 1576712827}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1576712829 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1949031003102542502, guid: f2e295acd0ecb8740ac18d42aeeb9db9, type: 3}
+  m_PrefabInstance: {fileID: 1576712827}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1639233519
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,7 +1573,7 @@ PrefabInstance:
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: textMeshProUGUILife
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1576712829}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: killableObjectsCount
       value: 20
@@ -1559,7 +1581,7 @@ PrefabInstance:
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: textMeshProUGUIScore
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1576712828}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: additionalObjectsCount
       value: 10
