@@ -1316,7 +1316,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 300, y: 160.50977}
+  m_AnchoredPosition: {x: 380, y: 160.50977}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &809155997
@@ -1860,7 +1860,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -300, y: 160.50977}
+  m_AnchoredPosition: {x: -380, y: 160.50977}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1366596797
@@ -2146,7 +2146,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: maxObjects
-      value: 100
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: lifesMainBall
@@ -2162,7 +2162,7 @@ PrefabInstance:
       objectReference: {fileID: 663479305}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: killableObjectsCount
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8398231517249640723, guid: 359b74d0155405249a1afe056068c3d2, type: 3}
       propertyPath: textMeshProUGUIScore
