@@ -175,9 +175,18 @@ public class LevelGeneration : MonoBehaviour
 
     public void Shoot()
     {
+        if (!bCanShoot) return; // ⛔ Empêche de tirer si ce n'est pas autorisé
+
+        if (dir == Vector3.zero)
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0f;
+            dir = (mousePos - rb.transform.position).normalized;
+        }
+
         Debug.Log("Shoot");
-        rb.bodyType = RigidbodyType2D.Dynamic; // Passer le Rigidbody en mode dynamique
-        rb.AddForce(dir * clickForce); // Appliquer une force
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.AddForce(dir * clickForce);
 
         bCanShoot = false;
 
@@ -186,6 +195,8 @@ public class LevelGeneration : MonoBehaviour
 
         textMeshProUGUILife.text = "Balls remaining : " + ballsCount.ToString();
     }
+
+
 
     private void Aim()
     {
