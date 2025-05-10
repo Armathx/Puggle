@@ -196,52 +196,60 @@ public class LevelGeneration : MonoBehaviour
         textMeshProUGUILife.text = "Balls remaining : " + ballsCount.ToString();
     }
 
+ 
+
+    public void TryShoot()
+    {
+        if (!bCanShoot) return;
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0f;
+        dir = (mousePos - rb.transform.position).normalized;
+
+        Shoot(); // Méthode déjà existante
+    }
 
 
     private void Aim()
     {
-        if (bCanShoot)
-        {
-            // Gestion des touches pour changer de point de spawn
-            if (Input.GetKeyDown(KeyCode.A) || (Input.GetMouseButtonDown(0)))
-            {
-                // Passer au point de spawn pr�c�dent
-                currentSpawnIndex = (currentSpawnIndex - 1 + spawnPoints.Length) % spawnPoints.Length;
-                //Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
+        if (!bCanShoot) return;
 
-                RespawnMainBallAtCurrentPoint();
-            }
+        // Juste mise à jour du LineRenderer
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0f;
 
-            if (Input.GetKeyDown(KeyCode.D) || (Input.GetMouseButtonDown(1)))
-            {
-                // Passer au point de spawn suivant
-                currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
-                //Debug.Log("Point de spawn actuel : " + currentSpawnIndex);
-
-                RespawnMainBallAtCurrentPoint();
-            }
-
-            // R�cup�rer la position de la souris en coordonn�es mondiales
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePos.z = 0f; // Assurer une position Z correcte pour un jeu 2D
-
-            // Calculer la direction vers la souris
-            Vector3 mouseDir = (mousePos - rb.transform.position).normalized;
-
-            // Mettre � jour le LineRenderer
-            lineRenderer.SetPosition(0, mousePos);
-            lineRenderer.SetPosition(1, rb.transform.position);
-
-            // Appliquer une force lors du clic gauche / Espace
-
-            if (((Input.GetKeyDown(KeyCode.Space)) || (Input.GetMouseButtonDown(2))))
-            {
-                dir = mouseDir;
-
-                Shoot();
-            }
-        }
+        Vector3 mouseDir = (mousePos - rb.transform.position).normalized;
+        lineRenderer.SetPosition(0, mousePos);
+        lineRenderer.SetPosition(1, rb.transform.position);
     }
+
+    public void ShootFromUI()
+    {
+        if (!bCanShoot) return;
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0f;
+        dir = (mousePos - rb.transform.position).normalized;
+
+        Shoot();
+    }
+
+    public void SpawnLeft()
+    {
+        if (!bCanShoot) return;
+
+        currentSpawnIndex = (currentSpawnIndex - 1 + spawnPoints.Length) % spawnPoints.Length;
+        RespawnMainBallAtCurrentPoint();
+    }
+
+    public void SpawnRight()
+    {
+        if (!bCanShoot) return;
+
+        currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
+        RespawnMainBallAtCurrentPoint();
+    }
+
 
     private void SpawnMainBall()
     {
